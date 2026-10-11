@@ -1043,10 +1043,11 @@
     /* ============================================================
        Reveal on scroll
        ============================================================ */
+    /* começa um pouco antes de entrar na tela e assenta rápido: o conteúdo chega legível, sem parecer "carregando" */
     .js [data-reveal] {
       opacity: 0; transform: translateY(18px);
-      transition: opacity 800ms var(--ease-out), transform 800ms var(--ease-out);
-      transition-delay: calc(var(--d, 0) * 70ms);
+      transition: opacity 560ms var(--ease-out), transform 560ms var(--ease-out);
+      transition-delay: calc(var(--d, 0) * 50ms);
     }
     .js [data-reveal].is-in { opacity: 1; transform: none; }
 
@@ -1275,7 +1276,7 @@
           <p class="lead" data-reveal style="--d:1">Conheça as três partes de um implante dentário e como elas se encaixam.</p>
         </div>
 
-        <div class="p3d__stage" id="p3dStage" data-model="assets/implante-dentario.01f48816f5.glb" data-viewer="assets/three-r128-viewer.89bafc78ee.js" tabindex="0"
+        <div class="p3d__stage" id="p3dStage" data-model="assets/implante-dentario.01f48816f5.glb" data-viewer="assets/three-r128-viewer.3a711032db.js" tabindex="0"
              role="group" aria-roledescription="modelo 3D" aria-label="Modelo 3D ilustrativo de um implante dentário entre dois dentes naturais, com gengiva e osso em corte: coroa em cima, pilar no meio e implante no osso" aria-describedby="p3dKeys" data-reveal>
           <img class="p3d__poster" src="3d/poster-arcada.webp" alt="" width="760" height="759" aria-hidden="true" loading="lazy" decoding="async" />
           <canvas id="p3dCanvas" aria-hidden="true"></canvas>
@@ -1724,7 +1725,7 @@
         entries.forEach((entry) => {
           if (entry.isIntersecting) { entry.target.classList.add('is-in'); io.unobserve(entry.target); }
         });
-      }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
+      }, { rootMargin: '0px 0px 8% 0px', threshold: 0 });
       revealEls.forEach((el) => io.observe(el));
     } else {
       revealEls.forEach((el) => el.classList.add('is-in'));
@@ -2138,6 +2139,16 @@
        em paralelo com o modelo. Só começa depois do carregamento da página, com 1,5 tela de antecedência.
        Sem WebGL (ou se algo falhar), fica a imagem explicativa. */
     const fail = () => stage.classList.add('is-failed');
+    // etapas que ainda param a GPU (Chrome/Windows) acontecem nas pausas da rolagem, nunca no meio dela
+    let lastScroll = 0;
+    const markScroll = () => { lastScroll = performance.now(); };
+    addEventListener('scroll', markScroll, { passive: true });
+    addEventListener('touchmove', markScroll, { passive: true });
+    const calm = () => new Promise((ok) => {
+      const t0 = performance.now();
+      const tick = () => { const now = performance.now(); if (now - lastScroll > 250 || now - t0 > 3000) ok(); else setTimeout(tick, 60); };
+      tick();
+    });
     if (!window.WebGLRenderingContext) { fail(); return; }
     const loadScript = (src) => new Promise((ok, ko) => {
       const s = document.createElement('script');
@@ -2177,6 +2188,7 @@
 
     async function build(gltf) {
       const T = window.THREE;
+      await pause(); await calm(); // criar o contexto WebGL é síncrono: fora da tarefa que decodifica o modelo e numa pausa da rolagem
       const canvas = document.getElementById('p3dCanvas');
       const renderer = new T.WebGLRenderer({ canvas, antialias: true, alpha: true });
       // resolução interna: até 2x; desce em passos se os quadros ficarem lentos de forma sustentada
@@ -2187,6 +2199,29 @@
       renderer.outputEncoding = T.sRGBEncoding;
       renderer.toneMapping = T.ACESFilmicToneMapping;
       renderer.toneMappingExposure = 1.0;
+      /* Shaders compilados em segundo plano: sem consultar o resultado na hora (isso obriga a esperar a GPU,
+         0,7 a 1,2 s de página parada no Chrome/Windows) e, com KHR_parallel_shader_compile, só desenha
+         quando os programas estiverem prontos. Sem a extensão, o comportamento é o de antes. */
+      renderer.debug.checkShaderErrors = false;
+      const glx = renderer.getContext(), parallel = glx.getExtension('KHR_parallel_shader_compile');
+      // a 1ª consulta a cada programa ainda espera a GPU (~100-250 ms no Chrome/Windows): uma por vez, nas pausas da rolagem
+      const warm = async () => {
+        for (const p of renderer.info.programs) {
+          if (p.warm) continue;
+          await calm(); p.getUniforms(); p.getAttributes(); p.warm = true;
+          await pause();
+        }
+      };
+      const compiled = () => new Promise((ok) => {
+        if (!parallel) return ok();
+        const t0 = performance.now();
+        const check = () => {
+          const done = renderer.info.programs.every((p) => glx.getProgramParameter(p.program, parallel.COMPLETION_STATUS_KHR));
+          if (done || performance.now() - t0 > 5000) ok(); else setTimeout(check, 16);
+        };
+        check();
+      });
+      const shadersReady = async () => { await compiled(); await warm(); };
       const scene = new T.Scene();
       const camera = new T.PerspectiveCamera(30, 1, 0.05, 100);
       await pause();
@@ -2209,6 +2244,8 @@
         const m = new T.Mesh(new T.PlaneGeometry(w, h), new T.MeshBasicMaterial({ color: 0xffffff, side: T.DoubleSide }));
         m.position.set(x, y, z); m.lookAt(0, 0, 0); envScene.add(m);
       });
+      await shadersReady(); // o desfoque do ambiente (criado com o PMREMGenerator) compila sem travar
+      await calm();
       scene.environment = pmrem.fromScene(envScene, 0.04).texture;
       pmrem.dispose();
       envScene.traverse((o) => { if (o.isMesh) { o.geometry.dispose(); o.material.dispose(); } });
@@ -2651,7 +2688,8 @@
       const zoomIn = stage.querySelector('[data-tool="in"]');
       const zoomOut = stage.querySelector('[data-tool="out"]');
       const ui = { home: null, zin: null, zout: null };
-      function kick() { if (!raf && visible && !document.hidden) raf = requestAnimationFrame(loop); }
+      let built = false; // nenhum quadro antes de os shaders estarem prontos (o ResizeObserver dispara antes)
+      function kick() { if (built && !raf && visible && !document.hidden) raf = requestAnimationFrame(loop); }
       const setDpr = (v) => { dpr = v; renderer.setPixelRatio(dpr); renderer.setSize(w, h, false); };
       function loop(t) {
         raf = 0;
@@ -2942,8 +2980,13 @@
         }, { threshold: 0.6 }).observe(stage);
       }
       // shaders compilados numa etapa própria, antes do primeiro quadro
+      parts.forEach((p) => p.outlines.forEach((o) => { o.visible = true; })); // o contorno também, para o 1º destaque não travar
       renderer.compile(scene, camera);
-      await pause();
+      parts.forEach((p) => p.outlines.forEach((o) => { o.visible = false; }));
+      await shadersReady();
+      await calm();
+      built = true;
+      if (!raf) raf = requestAnimationFrame(loop); // um quadro mesmo fora da tela: o 3D fica pronto e a montagem de entrada toca ao chegar
       resize(); // agenda o primeiro quadro; "is-ready" entra quando ele estiver desenhado
       // estado de teste (somente leitura) para verificação automatizada
       stage.p3dDebug = () => ({ hover: state.hover, pinned: state.pinned, offsets: off.map((s) => +s.x.toFixed(5)), dragging, press: press.map((s) => +s.x.toFixed(5)), intro: intro.map((s) => +s.x.toFixed(3)), glow: glow.map((s) => +s.x.toFixed(3)), pending: pending.map((p) => p.to), pressPart, prox: +prox.x.toFixed(3), camE: +camE.x.toFixed(3), autoV: +autoV.x.toFixed(3), az: +az.x.toFixed(3), dpr, demo: demoAt ? Math.round(demoAt) : 0 });
