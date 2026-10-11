@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Prosperare - Implantes Dentários | São Paulo</title>
   <meta name="description" content="Implantes dentários de alta qualidade em São Paulo. Transforme seu sorriso com a Prosperare. Agende sua consulta agora." />
+  <!-- o site já é escuro: impede que o modo escuro forçado (Chrome/Samsung Internet no Android) altere as cores -->
+  <meta name="color-scheme" content="dark" />
   <meta name="theme-color" content="#0f1b2d" />
   <link rel="canonical" href="https://clinicaprosperare.com.br/" />
 
@@ -25,11 +27,9 @@
   <link rel="preload" as="image" href="img/banner-mobile.webp" media="(max-width: 1023px)" fetchpriority="high" />
   <link rel="preload" as="image" href="img/banner-desk.webp" media="(min-width: 1024px)" fetchpriority="high" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/light/style.css" />
-  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css" />
+  <!-- fontes locais: só os dois arquivos usados na primeira tela recebem preload -->
+  <link rel="preload" href="assets/fonts/manrope-latin.a30ddcd349.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="assets/fonts/cormorant-garamond-latin.d80df8ff5a.woff2" as="font" type="font/woff2" crossorigin />
 
   <script>document.documentElement.classList.add('js');</script>
 
@@ -57,6 +57,12 @@
   </script>
 
   <style>
+    /* Fontes locais (Cormorant Garamond e Manrope, subconjunto latino com acentos do português).
+       Mesmos arquivos variáveis do Google Fonts; swap evita texto invisível. */
+    @font-face { font-family: "Cormorant Garamond"; font-style: normal; font-weight: 500 600; font-display: swap; src: url(assets/fonts/cormorant-garamond-latin.d80df8ff5a.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+    @font-face { font-family: "Cormorant Garamond"; font-style: italic; font-weight: 500 600; font-display: swap; src: url(assets/fonts/cormorant-garamond-italic-latin.6f2f5c3b1a.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+    @font-face { font-family: "Manrope"; font-style: normal; font-weight: 400 700; font-display: swap; src: url(assets/fonts/manrope-latin.a30ddcd349.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+
     /* ============================================================
        Prosperare. Tokens (marca: navy #0f1b2d + dourado #b8965a)
        ============================================================ */
@@ -69,17 +75,18 @@
       --gold-700: #8a6e3e;
       --wa: #25d366;
 
-      --bg: #f8f6f2;
-      --surface: #fffefb;
-      --surface-2: #f1ede5;
-      --ink: #0f1b2d;
-      --ink-2: #3d4757;
-      --muted: #5b6474;
-      --accent-ink: #7a5f33;
-      --line: rgba(15, 27, 45, 0.12);
-      --line-strong: rgba(15, 27, 45, 0.24);
-      --tint-gold: linear-gradient(160deg, #f1e8d6 0%, #e4d2ae 100%);
-      --shadow: 0 1px 2px rgba(15, 27, 45, 0.06), 0 18px 40px -18px rgba(15, 27, 45, 0.28);
+      /* paleta única (a escura) em todos os aparelhos, independente do tema do sistema */
+      --bg: #0b1422;
+      --surface: #111d2f;
+      --surface-2: #0e1828;
+      --ink: #f2eee6;
+      --ink-2: #c9cfd8;
+      --muted: #9aa4b2;
+      --accent-ink: #d4b07a;
+      --line: rgba(242, 238, 230, 0.1);
+      --line-strong: rgba(242, 238, 230, 0.22);
+      --tint-gold: linear-gradient(160deg, #1d2534 0%, #2b2a27 100%);
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 18px 44px -18px rgba(0, 0, 0, 0.7);
 
       --on-dark: #f2eee6;
       --on-dark-2: #c3cad5;
@@ -95,22 +102,6 @@
       --gutter: clamp(1rem, 4vw, 3rem);
       --maxw: 1240px;
       --nav-h: 72px;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #0b1422;
-        --surface: #111d2f;
-        --surface-2: #0e1828;
-        --ink: #f2eee6;
-        --ink-2: #c9cfd8;
-        --muted: #9aa4b2;
-        --accent-ink: #d4b07a;
-        --line: rgba(242, 238, 230, 0.1);
-        --line-strong: rgba(242, 238, 230, 0.22);
-        --tint-gold: linear-gradient(160deg, #1d2534 0%, #2b2a27 100%);
-        --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 18px 44px -18px rgba(0, 0, 0, 0.7);
-      }
     }
 
     /* ============================================================
@@ -138,7 +129,11 @@
     img { display: block; max-width: 100%; height: auto; }
     a { color: inherit; text-decoration: none; -webkit-tap-highlight-color: transparent; }
     button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-    i[class*="ph-"] { line-height: 1; flex-shrink: 0; }
+    /* ícones Phosphor (SVG do sprite no início do body): caixa de 1em como na fonte de ícones */
+    i[class*="ph-"] { display: inline-block; position: relative; width: 1em; height: 1em; line-height: 0; flex-shrink: 0; }
+    /* linha de base a 0,9375em do topo, como na fonte (ascendente 960/1024): mesmo alinhamento de antes */
+    i[class*="ph-"]::before { content: ""; display: inline-block; height: 0.9375em; }
+    i[class*="ph-"] > svg { position: absolute; inset: 0; width: 100%; height: 100%; fill: currentColor; overflow: visible; }
 
     :focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 6px; }
 
@@ -442,14 +437,10 @@
       margin-bottom: 26px;
     }
     .tile__icon i { font-size: 1.45rem; }
-    .tile--implantes { grid-column: span 7; background: var(--navy); color: var(--on-dark); }
+    .tile--implantes { grid-column: span 7; background: #14243b; border: 1px solid var(--line); color: var(--on-dark); }
     .tile--implantes p { color: var(--on-dark-2); }
     .tile--implantes .tile__icon { color: var(--gold-200); border-color: rgba(212, 176, 122, 0.45); }
     .tile--implantes .tlink { color: var(--gold-200); }
-    @media (prefers-color-scheme: dark) {
-      .tile--implantes { background: #14243b; border: 1px solid var(--line); }
-      .rt { background: #14243b; border: 1px solid var(--line); }
-    }
     .tile__mark {
       position: absolute; z-index: -1;
       width: min(380px, 62%); right: -6%; bottom: -14%;
@@ -461,10 +452,7 @@
     .tile--protocolo .tile__icon { color: var(--gold-200); border-color: rgba(212, 176, 122, 0.45); }
     .tile--protocolo .tlink { color: var(--gold-200); }
 
-    .tile--carga { --carga-ink: #634a24; grid-column: span 5; background: var(--tint-gold); color: var(--ink); }
-    @media (prefers-color-scheme: dark) {
-      .tile--carga { --carga-ink: var(--accent-ink); }
-    }
+    .tile--carga { --carga-ink: var(--accent-ink); grid-column: span 5; background: var(--tint-gold); color: var(--ink); }
     .tile--carga .tile__icon { color: var(--carga-ink); border-color: color-mix(in srgb, var(--carga-ink) 45%, transparent); }
     .tile--carga p { color: var(--ink-2); }
     .tile--carga .tlink { color: var(--carga-ink); }
@@ -636,10 +624,7 @@
     /* ============================================================
        Prova social (navy band): casos + avaliações
        ============================================================ */
-    .proof { background: var(--navy); color: var(--on-dark); }
-    @media (prefers-color-scheme: dark) {
-      .proof { background: #0e1a2b; }
-    }
+    .proof { background: #0e1a2b; color: var(--on-dark); }
     .proof h2 em { color: var(--gold-200); }
     .proof .lead { color: var(--on-dark-2); }
 
@@ -704,6 +689,9 @@
 
     .featured { position: relative; }
     .featured > i { font-size: 2.6rem; color: var(--gold); }
+    /* neste tamanho a fonte de ícones arredondava a linha: mesma altura de linha e mesmo desenho de antes */
+    .featured > i::before { height: 0.9135em; }
+    .featured > i > svg { top: -0.024em; bottom: auto; height: 1em; }
     .featured blockquote {
       margin-top: 12px;
       font: italic 500 clamp(1.65rem, 1.2rem + 1.5vw, 2.45rem)/1.24 var(--font-display);
@@ -796,7 +784,7 @@
       display: flex; align-items: center; gap: 18px;
       margin-top: 36px; padding: 20px 22px;
       border-radius: var(--radius);
-      background: var(--navy); color: var(--on-dark);
+      background: #14243b; border: 1px solid var(--line); color: var(--on-dark);
     }
     .rt img { width: 46px; height: 46px; object-fit: contain; }
     .rt small { display: block; font-size: 0.82rem; color: var(--gold-200); font-weight: 600; }
@@ -1044,6 +1032,15 @@
       .lb__next { right: 10px; }
     }
 
+    /* Seções abaixo do 3D: o navegador só calcula estilo, layout e pintura quando chegam perto da tela.
+       O tamanho estimado vira o real depois da primeira exibição (auto), sem saltos na rolagem. */
+    .proof { content-visibility: auto; contain-intrinsic-size: auto 2200px; }
+    #diferenciais { content-visibility: auto; contain-intrinsic-size: auto 1100px; }
+    #contato { content-visibility: auto; contain-intrinsic-size: auto 1300px; }
+    .footer { content-visibility: auto; contain-intrinsic-size: auto 900px; }
+    /* link interno acionado: tudo com o tamanho real antes da rolagem suave (chega no lugar certo) */
+    .cv-done :is(.proof, #diferenciais, #contato, .footer) { content-visibility: visible; }
+
     /* ============================================================
        Reveal on scroll
        ============================================================ */
@@ -1076,16 +1073,25 @@
     }
   </style>
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-579QN6RPB1"></script>
+  <!-- Google tag (gtag.js). A fila (dataLayer) começa já: page_view e cliques ficam registrados.
+       O gtag.js (~200 KB) só baixa depois do carregamento, com o navegador ocioso, fora do caminho crítico. -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-579QN6RPB1');
+    addEventListener('load', function () {
+      var go = function () {
+        var s = document.createElement('script');
+        s.async = true; s.src = 'https://www.googletagmanager.com/gtag/js?id=G-579QN6RPB1';
+        document.head.appendChild(s);
+      };
+      if ('requestIdleCallback' in window) requestIdleCallback(go, { timeout: 3000 }); else setTimeout(go, 1500);
+    }, { once: true });
   </script>
 </head>
 <body>
+  <svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><symbol id="if-push-pin" viewBox="0 0 256 256"><path d="M235.33,104l-53.47,53.65c4.56,12.67,6.45,33.89-13.19,60A15.93,15.93,0,0,1,157,224c-.38,0-.75,0-1.13,0a16,16,0,0,1-11.32-4.69L96.29,171,53.66,213.66a8,8,0,0,1-11.32-11.32L85,159.71l-48.3-48.3A16,16,0,0,1,38,87.63c25.42-20.51,49.75-16.48,60.4-13.14L152,20.7a16,16,0,0,1,22.63,0l60.69,60.68A16,16,0,0,1,235.33,104Z"/></symbol><symbol id="if-quotes" viewBox="0 0 256 256"><path d="M116,72v88a48.05,48.05,0,0,1-48,48,8,8,0,0,1,0-16,32,32,0,0,0,32-32v-8H40a16,16,0,0,1-16-16V72A16,16,0,0,1,40,56h60A16,16,0,0,1,116,72ZM216,56H156a16,16,0,0,0-16,16v64a16,16,0,0,0,16,16h60v8a32,32,0,0,1-32,32,8,8,0,0,0,0,16,48.05,48.05,0,0,0,48-48V72A16,16,0,0,0,216,56Z"/></symbol><symbol id="if-star" viewBox="0 0 256 256"><path d="M234.29,114.85l-45,38.83L203,211.75a16.4,16.4,0,0,1-24.5,17.82L128,198.49,77.47,229.57A16.4,16.4,0,0,1,53,211.75l13.76-58.07-45-38.83A16.46,16.46,0,0,1,31.08,86l59-4.76,22.76-55.08a16.36,16.36,0,0,1,30.27,0l22.75,55.08,59,4.76a16.46,16.46,0,0,1,9.37,28.86Z"/></symbol><symbol id="if-whatsapp-logo" viewBox="0 0 256 256"><path d="M152.58,145.23l23,11.48A24,24,0,0,1,152,176a72.08,72.08,0,0,1-72-72A24,24,0,0,1,99.29,80.46l11.48,23L101,118a8,8,0,0,0-.73,7.51,56.47,56.47,0,0,0,30.15,30.15A8,8,0,0,0,138,155ZM232,128A104,104,0,0,1,79.12,219.82L45.07,231.17a16,16,0,0,1-20.24-20.24l11.35-34.05A104,104,0,1,1,232,128Zm-40,24a8,8,0,0,0-4.42-7.16l-32-16a8,8,0,0,0-8,.5l-14.69,9.8a40.55,40.55,0,0,1-16-16l9.8-14.69a8,8,0,0,0,.5-8l-16-32A8,8,0,0,0,104,64a40,40,0,0,0-40,40,88.1,88.1,0,0,0,88,88A40,40,0,0,0,192,152Z"/></symbol><symbol id="i-arrow-counter-clockwise" viewBox="0 0 256 256"><path d="M222,128a94,94,0,0,1-92.74,94H128a93.43,93.43,0,0,1-64.5-25.65,6,6,0,1,1,8.24-8.72A82,82,0,1,0,70,70l-.19.19L39.44,98H72a6,6,0,0,1,0,12H24a6,6,0,0,1-6-6V56a6,6,0,0,1,12,0V90.34L61.63,61.4A94,94,0,0,1,222,128Z"/></symbol><symbol id="i-arrow-left" viewBox="0 0 256 256"><path d="M222,128a6,6,0,0,1-6,6H54.49l61.75,61.76a6,6,0,1,1-8.48,8.48l-72-72a6,6,0,0,1,0-8.48l72-72a6,6,0,0,1,8.48,8.48L54.49,122H216A6,6,0,0,1,222,128Z"/></symbol><symbol id="i-arrow-right" viewBox="0 0 256 256"><path d="M220.24,132.24l-72,72a6,6,0,0,1-8.48-8.48L201.51,134H40a6,6,0,0,1,0-12H201.51L139.76,60.24a6,6,0,0,1,8.48-8.48l72,72A6,6,0,0,1,220.24,132.24Z"/></symbol><symbol id="i-arrow-up-right" viewBox="0 0 256 256"><path d="M198,64V168a6,6,0,0,1-12,0V78.48L68.24,196.24a6,6,0,0,1-8.48-8.48L177.52,70H88a6,6,0,0,1,0-12H192A6,6,0,0,1,198,64Z"/></symbol><symbol id="i-arrows-out-simple" viewBox="0 0 256 256"><path d="M214,48V96a6,6,0,0,1-12,0V62.48l-53.76,53.76a6,6,0,0,1-8.48-8.48L193.52,54H160a6,6,0,0,1,0-12h48A6,6,0,0,1,214,48ZM107.76,139.76,54,193.52V160a6,6,0,0,0-12,0v48a6,6,0,0,0,6,6H96a6,6,0,0,0,0-12H62.48l53.76-53.76a6,6,0,0,0-8.48-8.48Z"/></symbol><symbol id="i-check" viewBox="0 0 256 256"><path d="M228.24,76.24l-128,128a6,6,0,0,1-8.48,0l-56-56a6,6,0,0,1,8.48-8.48L96,191.51,219.76,67.76a6,6,0,0,1,8.48,8.48Z"/></symbol><symbol id="i-clock-countdown" viewBox="0 0 256 256"><path d="M230,136.49A102.12,102.12,0,1,1,119.51,26a6,6,0,0,1,1,12A90.13,90.13,0,1,0,218,135.51a6,6,0,1,1,12,1ZM122,72v56a6,6,0,0,0,6,6h56a6,6,0,0,0,0-12H134V72a6,6,0,0,0-12,0Zm38-26a10,10,0,1,0-10-10A10,10,0,0,0,160,46Zm36,24a10,10,0,1,0-10-10A10,10,0,0,0,196,70Zm24,36a10,10,0,1,0-10-10A10,10,0,0,0,220,106Z"/></symbol><symbol id="i-crosshair" viewBox="0 0 256 256"><path d="M232,122H221.8A94.13,94.13,0,0,0,134,34.2V24a6,6,0,0,0-12,0V34.2A94.13,94.13,0,0,0,34.2,122H24a6,6,0,0,0,0,12H34.2A94.13,94.13,0,0,0,122,221.8V232a6,6,0,0,0,12,0V221.8A94.13,94.13,0,0,0,221.8,134H232a6,6,0,0,0,0-12Zm-98,87.76V200a6,6,0,0,0-12,0v9.76A82.09,82.09,0,0,1,46.24,134H56a6,6,0,0,0,0-12H46.24A82.09,82.09,0,0,1,122,46.24V56a6,6,0,0,0,12,0V46.24A82.09,82.09,0,0,1,209.76,122H200a6,6,0,0,0,0,12h9.76A82.09,82.09,0,0,1,134,209.76ZM128,90a38,38,0,1,0,38,38A38,38,0,0,0,128,90Zm0,64a26,26,0,1,1,26-26A26,26,0,0,1,128,154Z"/></symbol><symbol id="i-cube" viewBox="0 0 256 256"><path d="M222.72,67.9l-88-48.17a13.9,13.9,0,0,0-13.44,0l-88,48.18A14,14,0,0,0,26,80.18v95.64a14,14,0,0,0,7.28,12.27l88,48.18a13.92,13.92,0,0,0,13.44,0l88-48.18A14,14,0,0,0,230,175.82V80.18A14,14,0,0,0,222.72,67.9ZM127,30.25a2,2,0,0,1,1.92,0L212.51,76,128,122.24,43.49,76ZM39,177.57a2,2,0,0,1-1-1.75V86.66l84,46V223Zm177.92,0L134,223V132.64l84-46v89.16A2,2,0,0,1,217,177.57Z"/></symbol><symbol id="i-google-logo" viewBox="0 0 256 256"><path d="M222,128a94,94,0,1,1-21.49-59.82,6,6,0,1,1-9.25,7.64A82,82,0,1,0,209.78,134H128a6,6,0,0,1,0-12h88A6,6,0,0,1,222,128Z"/></symbol><symbol id="i-hand-heart" viewBox="0 0 256 256"><path d="M229.12,142.65a22.43,22.43,0,0,0-19.55-3.88l-4.32,1C227,119.55,238,99.51,238,80c0-25.36-20.39-46-45.46-46A45.51,45.51,0,0,0,156,52a45.51,45.51,0,0,0-36.54-18C94.39,34,74,54.64,74,80c0,11.38,3.63,22.49,11.29,34.36a29.73,29.73,0,0,0-16.56,8.43L45.52,146H16A14,14,0,0,0,2,160v40a14,14,0,0,0,14,14H120a6,6,0,0,0,1.46-.18l64-16a7.16,7.16,0,0,0,.89-.3L225.17,181l.33-.15a22.6,22.6,0,0,0,3.62-38.18ZM119.46,46a33.16,33.16,0,0,1,31,20.28,6,6,0,0,0,11.1,0,33.16,33.16,0,0,1,31-20.28C210.68,46,226,61.57,226,80c0,20.24-16.18,43-46.8,65.75l-14.87,3.42A26,26,0,0,0,140,114H99.67C90.36,101.67,86,90.81,86,80,86,61.57,101.32,46,119.46,46ZM14,200V160a2,2,0,0,1,2-2H42v44H16A2,2,0,0,1,14,200Zm206.28-30-38.2,16.27L119.26,202H54V154.49l23.21-23.22A17.88,17.88,0,0,1,89.94,126H140a14,14,0,0,1,0,28H112a6,6,0,0,0,0,12h32a6,6,0,0,0,1.34-.15l67-15.41.24-.06A10.6,10.6,0,0,1,220.28,170Z"/></symbol><symbol id="i-identification-badge" viewBox="0 0 256 256"><path d="M151.11,166.13a38,38,0,1,0-46.22,0A65.75,65.75,0,0,0,75.2,188.4a6,6,0,0,0,9.6,7.2,54,54,0,0,1,86.4,0,6,6,0,0,0,9.6-7.2A65.75,65.75,0,0,0,151.11,166.13ZM128,110a26,26,0,1,1-26,26A26,26,0,0,1,128,110Zm72-84H56A14,14,0,0,0,42,40V216a14,14,0,0,0,14,14H200a14,14,0,0,0,14-14V40A14,14,0,0,0,200,26Zm2,190a2,2,0,0,1-2,2H56a2,2,0,0,1-2-2V40a2,2,0,0,1,2-2H200a2,2,0,0,1,2,2ZM90,64a6,6,0,0,1,6-6h64a6,6,0,0,1,0,12H96A6,6,0,0,1,90,64Z"/></symbol><symbol id="i-list" viewBox="0 0 256 256"><path d="M222,128a6,6,0,0,1-6,6H40a6,6,0,0,1,0-12H216A6,6,0,0,1,222,128ZM40,70H216a6,6,0,0,0,0-12H40a6,6,0,0,0,0,12ZM216,186H40a6,6,0,0,0,0,12H216a6,6,0,0,0,0-12Z"/></symbol><symbol id="i-map-pin" viewBox="0 0 256 256"><path d="M128,66a38,38,0,1,0,38,38A38,38,0,0,0,128,66Zm0,64a26,26,0,1,1,26-26A26,26,0,0,1,128,130Zm0-112a86.1,86.1,0,0,0-86,86c0,30.91,14.34,63.74,41.47,94.94a252.32,252.32,0,0,0,41.09,38,6,6,0,0,0,6.88,0,252.32,252.32,0,0,0,41.09-38c27.13-31.2,41.47-64,41.47-94.94A86.1,86.1,0,0,0,128,18Zm0,206.51C113,212.93,54,163.62,54,104a74,74,0,0,1,148,0C202,163.62,143,212.93,128,224.51Z"/></symbol><symbol id="i-minus" viewBox="0 0 256 256"><path d="M222,128a6,6,0,0,1-6,6H40a6,6,0,0,1,0-12H216A6,6,0,0,1,222,128Z"/></symbol><symbol id="i-plus" viewBox="0 0 256 256"><path d="M222,128a6,6,0,0,1-6,6H134v82a6,6,0,0,1-12,0V134H40a6,6,0,0,1,0-12h82V40a6,6,0,0,1,12,0v82h82A6,6,0,0,1,222,128Z"/></symbol><symbol id="i-seal-check" viewBox="0 0 256 256"><path d="M224.42,104.2c-3.9-4.07-7.93-8.27-9.55-12.18-1.5-3.63-1.58-9-1.67-14.68-.14-9.38-.3-20-7.42-27.12S188,42.94,178.66,42.8c-5.68-.09-11-.17-14.68-1.67-3.91-1.62-8.11-5.65-12.18-9.55C145.16,25.22,137.64,18,128,18s-17.16,7.22-23.8,13.58c-4.07,3.9-8.27,7.93-12.18,9.55-3.63,1.5-9,1.58-14.68,1.67-9.38.14-20,.3-27.12,7.42S42.94,68,42.8,77.34c-.09,5.68-.17,11-1.67,14.68-1.62,3.91-5.65,8.11-9.55,12.18C25.22,110.84,18,118.36,18,128s7.22,17.16,13.58,23.8c3.9,4.07,7.93,8.27,9.55,12.18,1.5,3.63,1.58,9,1.67,14.68.14,9.38.3,20,7.42,27.12S68,213.06,77.34,213.2c5.68.09,11,.17,14.68,1.67,3.91,1.62,8.11,5.65,12.18,9.55C110.84,230.78,118.36,238,128,238s17.16-7.22,23.8-13.58c4.07-3.9,8.27-7.93,12.18-9.55,3.63-1.5,9-1.58,14.68-1.67,9.38-.14,20-.3,27.12-7.42s7.28-17.74,7.42-27.12c.09-5.68.17-11,1.67-14.68,1.62-3.91,5.65-8.11,9.55-12.18C230.78,145.16,238,137.64,238,128S230.78,110.84,224.42,104.2Zm-8.66,39.3c-4.67,4.86-9.5,9.9-12,15.9-2.38,5.74-2.48,12.52-2.58,19.08-.11,7.44-.23,15.14-3.9,18.82s-11.38,3.79-18.82,3.9c-6.56.1-13.34.2-19.08,2.58-6,2.48-11,7.31-15.91,12-5.25,5-10.68,10.24-15.49,10.24s-10.24-5.21-15.5-10.24c-4.86-4.67-9.9-9.5-15.9-12-5.74-2.38-12.52-2.48-19.08-2.58-7.44-.11-15.14-.23-18.82-3.9s-3.79-11.38-3.9-18.82c-.1-6.56-.2-13.34-2.58-19.08-2.48-6-7.31-11-12-15.91C35.21,138.24,30,132.81,30,128s5.21-10.24,10.24-15.5c4.67-4.86,9.5-9.9,12-15.9,2.38-5.74,2.48-12.52,2.58-19.08.11-7.44.23-15.14,3.9-18.82s11.38-3.79,18.82-3.9c6.56-.1,13.34-.2,19.08-2.58,6-2.48,11-7.31,15.91-12C117.76,35.21,123.19,30,128,30s10.24,5.21,15.5,10.24c4.86,4.67,9.9,9.5,15.9,12,5.74,2.38,12.52,2.48,19.08,2.58,7.44.11,15.14.23,18.82,3.9s3.79,11.38,3.9,18.82c.1,6.56.2,13.34,2.58,19.08,2.48,6,7.31,11,12,15.91,5,5.25,10.24,10.68,10.24,15.49S220.79,138.24,215.76,143.5ZM172.24,99.76a6,6,0,0,1,0,8.48l-56,56a6,6,0,0,1-8.48,0l-24-24a6,6,0,0,1,8.48-8.48L112,151.51l51.76-51.75A6,6,0,0,1,172.24,99.76Z"/></symbol><symbol id="i-smiley" viewBox="0 0 256 256"><path d="M173.19,155c-9.92,17.16-26.39,27-45.19,27s-35.27-9.84-45.19-27a6,6,0,0,1,10.38-6c7.84,13.54,20.2,21,34.81,21s27-7.46,34.81-21a6,6,0,1,1,10.38,6ZM230,128A102,102,0,1,1,128,26,102.12,102.12,0,0,1,230,128Zm-12,0a90,90,0,1,0-90,90A90.1,90.1,0,0,0,218,128ZM92,118a10,10,0,1,0-10-10A10,10,0,0,0,92,118Zm72-20a10,10,0,1,0,10,10A10,10,0,0,0,164,98Z"/></symbol><symbol id="i-tooth" viewBox="0 0 256 256"><path d="M170.23,69.57,144.16,80l26.07,10.43a6,6,0,1,1-4.46,11.14L128,86.46,90.23,101.57a6,6,0,0,1-7.8-3.35,6,6,0,0,1,3.34-7.79L111.84,80,85.77,69.57a6,6,0,0,1,4.46-11.14L128,73.53l37.77-15.1a6,6,0,1,1,4.46,11.14ZM222,79.75c0,42.45-7.91,74.9-14.59,94.64-8.59,25.41-20.22,44.74-31.91,53a13.7,13.7,0,0,1-13.94,1.23,14.1,14.1,0,0,1-8-11.69c-1.13-15.33-5.87-51-25.52-51s-24.39,35.64-25.52,51a14.1,14.1,0,0,1-14,13,13.69,13.69,0,0,1-8-2.58c-11.69-8.29-23.32-27.62-31.91-53C41.91,154.65,34,122.2,34,79.75A54,54,0,0,1,88,26h80A54,54,0,0,1,222,79.75Zm-12,0A42,42,0,0,0,168,38H88A42,42,0,0,0,46,79.76c-.07,73.93,24.69,126,41.44,137.88a1.77,1.77,0,0,0,1.88.15,2,2,0,0,0,1.19-1.71C93.46,176,106.77,154,128,154s34.54,22,37.49,62.09a2,2,0,0,0,1.19,1.71,1.77,1.77,0,0,0,1.88-.15C185.31,205.74,210.07,153.69,210,79.76Z"/></symbol><symbol id="i-train" viewBox="0 0 256 256"><path d="M184,26H72A30,30,0,0,0,42,56V184a30,30,0,0,0,30,30H84L67.2,236.4a6,6,0,1,0,9.6,7.2L99,214h58l22.2,29.6a6,6,0,0,0,9.6-7.2L172,214h12a30,30,0,0,0,30-30V56A30,30,0,0,0,184,26ZM54,122V78h68v44Zm80-44h68v44H134ZM72,38H184a18,18,0,0,1,18,18V66H54V56A18,18,0,0,1,72,38ZM184,202H72a18,18,0,0,1-18-18V134H202v50A18,18,0,0,1,184,202Zm-2-30a10,10,0,1,1-10-10A10,10,0,0,1,182,172Zm-88,0a10,10,0,1,1-10-10A10,10,0,0,1,94,172Z"/></symbol><symbol id="i-user-circle" viewBox="0 0 256 256"><path d="M128,26A102,102,0,1,0,230,128,102.12,102.12,0,0,0,128,26ZM71.44,198a66,66,0,0,1,113.12,0,89.8,89.8,0,0,1-113.12,0ZM94,120a34,34,0,1,1,34,34A34,34,0,0,1,94,120Zm99.51,69.64a77.53,77.53,0,0,0-40-31.38,46,46,0,1,0-51,0,77.53,77.53,0,0,0-40,31.38,90,90,0,1,1,131,0Z"/></symbol><symbol id="i-whatsapp-logo" viewBox="0 0 256 256"><path d="M186.68,146.63l-32-16a6,6,0,0,0-6,.38L133,141.46A42.49,42.49,0,0,1,114.54,123L125,107.33a6,6,0,0,0,.38-6l-16-32A6,6,0,0,0,104,66a38,38,0,0,0-38,38,86.1,86.1,0,0,0,86,86,38,38,0,0,0,38-38A6,6,0,0,0,186.68,146.63ZM152,178a74.09,74.09,0,0,1-74-74,26,26,0,0,1,22.42-25.75l12.66,25.32-10.39,15.58a6,6,0,0,0-.54,5.63,54.43,54.43,0,0,0,29.07,29.07,6,6,0,0,0,5.63-.54l15.58-10.39,25.32,12.66A26,26,0,0,1,152,178ZM128,26A102,102,0,0,0,38.35,176.69L26.73,211.56a14,14,0,0,0,17.71,17.71l34.87-11.62A102,102,0,1,0,128,26Zm0,192a90,90,0,0,1-45.06-12.08,6.09,6.09,0,0,0-3-.81,6.2,6.2,0,0,0-1.9.31L40.65,217.88a2,2,0,0,1-2.53-2.53L50.58,178a6,6,0,0,0-.5-4.91A90,90,0,1,1,128,218Z"/></symbol><symbol id="i-wheelchair" viewBox="0 0 256 256"><path d="M253.69,190.1a6,6,0,0,0-7.59-3.79L227,192.66l-29.68-59.34A6,6,0,0,0,192,130H110V102.05c.66,0,1.33,0,2,0h56a6,6,0,0,0,0-12H112c-.67,0-1.33,0-2,0V77.4a30,30,0,1,0-12,0v14A70,70,0,0,0,112,230c32.62,0,62-22.08,69.81-52.5a6,6,0,0,0-11.62-3c-6.49,25.21-31,43.5-58.19,43.5A58,58,0,0,1,98,103.72V136a6,6,0,0,0,6,6h84.29l30.34,60.68a6,6,0,0,0,7.27,3l24-8A6,6,0,0,0,253.69,190.1ZM86,48a18,18,0,1,1,18,18A18,18,0,0,1,86,48Z"/></symbol><symbol id="i-x" viewBox="0 0 256 256"><path d="M204.24,195.76a6,6,0,1,1-8.48,8.48L128,136.49,60.24,204.24a6,6,0,0,1-8.48-8.48L119.51,128,51.76,60.24a6,6,0,0,1,8.48-8.48L128,119.51l67.76-67.75a6,6,0,0,1,8.48,8.48L136.49,128Z"/></symbol></svg>
   <a class="skip" href="#conteudo">Pular para o conteúdo</a>
   <div id="navSentinel" aria-hidden="true" style="position:absolute;top:40px;left:0;width:1px;height:1px;pointer-events:none"></div>
 
@@ -1093,7 +1099,7 @@
   <header class="nav" id="nav">
     <div class="wrap nav__inner">
       <a href="#inicio" class="brand" aria-label="Prosperare Implantes Dentários, início">
-        <img src="img/logo-marca-branca.png" alt="" width="34" height="34" />
+        <img src="img/logo-marca-branca-138.png" alt="" width="34" height="34" />
         <span>Prosperare</span>
       </a>
 
@@ -1108,11 +1114,11 @@
       <div class="nav__right">
         <a class="btn btn--gold btn--sm nav__cta" data-wa="nav" target="_blank" rel="noopener"
            href="https://wa.me/5511910050688?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20consulta%20na%20Prosperare.">
-          <i class="ph-fill ph-whatsapp-logo" aria-hidden="true"></i>Agendar consulta
+          <i class="ph-fill ph-whatsapp-logo" aria-hidden="true"><svg><use href="#if-whatsapp-logo"/></svg></i>Agendar consulta
         </a>
         <button class="nav__toggle" id="menuToggle" aria-expanded="false" aria-controls="menu" aria-label="Abrir menu">
-          <i class="ph-light ph-list" aria-hidden="true"></i>
-          <i class="ph-light ph-x" aria-hidden="true"></i>
+          <i class="ph-light ph-list" aria-hidden="true"><svg><use href="#i-list"/></svg></i>
+          <i class="ph-light ph-x" aria-hidden="true"><svg><use href="#i-x"/></svg></i>
         </button>
       </div>
     </div>
@@ -1128,7 +1134,7 @@
     <div class="menu__foot">
       <a class="btn btn--gold btn--block" data-wa="menu" target="_blank" rel="noopener"
          href="https://wa.me/5511910050688?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20consulta%20na%20Prosperare.">
-        <i class="ph-fill ph-whatsapp-logo" aria-hidden="true"></i>Agendar consulta
+        <i class="ph-fill ph-whatsapp-logo" aria-hidden="true"><svg><use href="#if-whatsapp-logo"/></svg></i>Agendar consulta
       </a>
       <p>Alameda Joaquim Eugênio de Lima, 598, Bela Vista, São Paulo</p>
     </div>
@@ -1156,7 +1162,7 @@
           <div class="hero__ctas" data-hero style="--d:3">
             <a class="btn btn--gold" data-wa="hero" target="_blank" rel="noopener"
                href="https://wa.me/5511910050688?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20consulta%20na%20Prosperare.">
-              <i class="ph-fill ph-whatsapp-logo" aria-hidden="true"></i>Agendar consulta
+              <i class="ph-fill ph-whatsapp-logo" aria-hidden="true"><svg><use href="#if-whatsapp-logo"/></svg></i>Agendar consulta
             </a>
             <a class="btn btn--ghost-light" href="#casos">Ver resultados</a>
           </div>
@@ -1169,31 +1175,31 @@
       <div class="wrap">
         <ul class="trust__card" role="list" data-reveal>
           <li class="trust__item">
-            <i class="ph-light ph-google-logo" aria-hidden="true"></i>
+            <i class="ph-light ph-google-logo" aria-hidden="true"><svg><use href="#i-google-logo"/></svg></i>
             <div>
               <strong>5,0 no Google</strong>
-              <span class="stars" aria-label="5 de 5 estrelas">
-                <i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i>
+              <span class="stars" role="img" aria-label="5 de 5 estrelas">
+                <i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i><i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i><i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i><i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i><i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i>
               </span>
               <span>36 avaliações</span>
             </div>
           </li>
           <li class="trust__item">
-            <i class="ph-light ph-identification-badge" aria-hidden="true"></i>
+            <i class="ph-light ph-identification-badge" aria-hidden="true"><svg><use href="#i-identification-badge"/></svg></i>
             <div>
               <strong>CRO-SP 133.079</strong>
               <span>Dra. Sheilla Oliveira Ferreira</span>
             </div>
           </li>
           <li class="trust__item">
-            <i class="ph-light ph-cube" aria-hidden="true"></i>
+            <i class="ph-light ph-cube" aria-hidden="true"><svg><use href="#i-cube"/></svg></i>
             <div>
               <strong>Diagnóstico 3D</strong>
               <span>Planejamento digital</span>
             </div>
           </li>
           <li class="trust__item">
-            <i class="ph-light ph-map-pin" aria-hidden="true"></i>
+            <i class="ph-light ph-map-pin" aria-hidden="true"><svg><use href="#i-map-pin"/></svg></i>
             <div>
               <strong>Bela Vista, São Paulo</strong>
               <span>Próximo à Av. Paulista</span>
@@ -1211,51 +1217,51 @@
 
         <div class="bento">
           <article class="tile tile--implantes" id="implantes" data-reveal>
-            <img class="tile__mark" src="img/logo-dourado.png" alt="" aria-hidden="true" loading="lazy" />
+            <img class="tile__mark" src="img/logo-dourado.webp" alt="" aria-hidden="true" loading="lazy" />
             <div>
-              <div class="tile__icon"><i class="ph-light ph-tooth" aria-hidden="true"></i></div>
+              <div class="tile__icon"><i class="ph-light ph-tooth" aria-hidden="true"><svg><use href="#i-tooth"/></svg></i></div>
               <h3>Implantes dentários</h3>
               <p>Protocolos clínicos rigorosos e implantes de marcas reconhecidas internacionalmente garantem resultados duradouros e previsíveis.</p>
             </div>
             <a class="tlink" data-wa="servico-implantes" target="_blank" rel="noopener"
                href="https://wa.me/5511910050688?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20consulta%20sobre%20implantes%20dent%C3%A1rios.">
-              Agendar consulta <i class="ph-light ph-arrow-right" aria-hidden="true"></i>
+              Agendar consulta <i class="ph-light ph-arrow-right" aria-hidden="true"><svg><use href="#i-arrow-right"/></svg></i>
             </a>
           </article>
 
           <article class="tile tile--protocolo" id="protocolo" data-reveal style="--d:1">
             <div>
-              <div class="tile__icon"><i class="ph-light ph-smiley" aria-hidden="true"></i></div>
+              <div class="tile__icon"><i class="ph-light ph-smiley" aria-hidden="true"><svg><use href="#i-smiley"/></svg></i></div>
               <h3>Prótese protocolo sobre implantes</h3>
               <p>Confeccionada com cuidado e técnica para ser a transformação na sua vida. Sorria com confiança.</p>
             </div>
             <a class="tlink" data-wa="servico-protocolo" target="_blank" rel="noopener"
                href="https://wa.me/5511910050688?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20consulta%20sobre%20pr%C3%B3tese%20protocolo%20sobre%20implantes.">
-              Agendar consulta <i class="ph-light ph-arrow-right" aria-hidden="true"></i>
+              Agendar consulta <i class="ph-light ph-arrow-right" aria-hidden="true"><svg><use href="#i-arrow-right"/></svg></i>
             </a>
           </article>
 
           <article class="tile tile--carga" id="carga-imediata" data-reveal>
             <div>
-              <div class="tile__icon"><i class="ph-light ph-clock-countdown" aria-hidden="true"></i></div>
+              <div class="tile__icon"><i class="ph-light ph-clock-countdown" aria-hidden="true"><svg><use href="#i-clock-countdown"/></svg></i></div>
               <h3>Carga imediata</h3>
               <p>Protocolos de carga imediata permitem que, em muitos casos, o paciente saia com dentes provisórios no mesmo dia da cirurgia.</p>
             </div>
             <a class="tlink" data-wa="servico-carga-imediata" target="_blank" rel="noopener"
                href="https://wa.me/5511910050688?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20consulta%20sobre%20implantes%20com%20carga%20imediata.">
-              Agendar consulta <i class="ph-light ph-arrow-right" aria-hidden="true"></i>
+              Agendar consulta <i class="ph-light ph-arrow-right" aria-hidden="true"><svg><use href="#i-arrow-right"/></svg></i>
             </a>
           </article>
 
           <article class="tile tile--planejamento" id="planejamento" data-reveal style="--d:1">
             <div>
-              <div class="tile__icon"><i class="ph-light ph-cube" aria-hidden="true"></i></div>
+              <div class="tile__icon"><i class="ph-light ph-cube" aria-hidden="true"><svg><use href="#i-cube"/></svg></i></div>
               <h3>Diagnóstico 3D e planejamento digital</h3>
               <p>Equipamentos modernos de diagnóstico por imagem 3D e planejamento digital para um tratamento mais seguro e minimamente invasivo.</p>
             </div>
             <a class="tlink" data-wa="servico-planejamento" target="_blank" rel="noopener"
                href="https://wa.me/5511910050688?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20consulta%20de%20avalia%C3%A7%C3%A3o%20com%20diagn%C3%B3stico%203D.">
-              Agendar consulta <i class="ph-light ph-arrow-right" aria-hidden="true"></i>
+              Agendar consulta <i class="ph-light ph-arrow-right" aria-hidden="true"><svg><use href="#i-arrow-right"/></svg></i>
             </a>
           </article>
         </div>
@@ -1270,27 +1276,27 @@
           <p class="lead" data-reveal style="--d:1">Conheça as três partes de um implante dentário e como elas se encaixam.</p>
         </div>
 
-        <div class="p3d__stage" id="p3dStage" data-model="3d/implante-dentario.glb" tabindex="0"
+        <div class="p3d__stage" id="p3dStage" data-model="assets/implante-dentario.01f48816f5.glb" data-viewer="assets/three-r128-viewer.bf018af3f2.js" tabindex="0"
              role="group" aria-roledescription="modelo 3D" aria-label="Modelo 3D ilustrativo de um implante dentário: coroa em cima, pilar no meio e implante embaixo" aria-describedby="p3dKeys" data-reveal>
-          <img class="p3d__poster" src="3d/modelo-montado.webp" alt="" width="900" height="900" aria-hidden="true" />
+          <img class="p3d__poster" src="3d/modelo-montado.webp" alt="" width="900" height="900" aria-hidden="true" loading="lazy" decoding="async" />
           <canvas id="p3dCanvas" aria-hidden="true"></canvas>
           <svg class="p3d__lines" id="p3dLines" aria-hidden="true"><line /><circle r="2.5" /></svg>
-          <span class="p3d__callout" id="p3dCallout" aria-hidden="true"><i class="ph-fill ph-push-pin"></i><span></span></span>
+          <span class="p3d__callout" id="p3dCallout" aria-hidden="true"><i class="ph-fill ph-push-pin" aria-hidden="true"><svg><use href="#if-push-pin"/></svg></i><span></span></span>
           <small class="p3d__note">Ilustração</small>
           <div class="p3d__tools">
-            <button class="p3d__tool" type="button" data-tool="in" aria-label="Aproximar o modelo"><i class="ph-light ph-plus" aria-hidden="true"></i></button>
-            <button class="p3d__tool" type="button" data-tool="out" aria-label="Afastar o modelo"><i class="ph-light ph-minus" aria-hidden="true"></i></button>
+            <button class="p3d__tool" type="button" data-tool="in" aria-label="Aproximar o modelo"><i class="ph-light ph-plus" aria-hidden="true"><svg><use href="#i-plus"/></svg></i></button>
+            <button class="p3d__tool" type="button" data-tool="out" aria-label="Afastar o modelo"><i class="ph-light ph-minus" aria-hidden="true"><svg><use href="#i-minus"/></svg></i></button>
           </div>
-          <button class="p3d__restore" type="button" id="p3dRestore" disabled><i class="ph-light ph-arrow-counter-clockwise" aria-hidden="true"></i>Restaurar vista</button>
+          <button class="p3d__restore" type="button" id="p3dRestore" disabled><i class="ph-light ph-arrow-counter-clockwise" aria-hidden="true"><svg><use href="#i-arrow-counter-clockwise"/></svg></i>Restaurar vista</button>
           <img class="p3d__fallback" src="3d/alternativa-estatica.webp" alt="As três partes do implante: coroa em cima, pilar no meio e implante embaixo" width="900" height="945" loading="lazy" />
           <p class="visually-hidden" id="p3dKeys">Use as setas para girar, as teclas mais e menos para aproximar, e zero para restaurar a vista. Os botões Coroa, Pilar e Implante destacam cada peça.</p>
         </div>
 
         <div class="p3d__ctrl" data-reveal style="--d:2">
           <div class="p3d__parts" role="group" aria-label="Partes do implante">
-            <button class="p3d__part" type="button" data-part="0" aria-pressed="false" aria-controls="p3dInfo"><i class="ph-light ph-check" aria-hidden="true"></i>Coroa</button>
-            <button class="p3d__part" type="button" data-part="1" aria-pressed="false" aria-controls="p3dInfo"><i class="ph-light ph-check" aria-hidden="true"></i>Pilar</button>
-            <button class="p3d__part" type="button" data-part="2" aria-pressed="false" aria-controls="p3dInfo"><i class="ph-light ph-check" aria-hidden="true"></i>Implante</button>
+            <button class="p3d__part" type="button" data-part="0" aria-pressed="false" aria-controls="p3dInfo"><i class="ph-light ph-check" aria-hidden="true"><svg><use href="#i-check"/></svg></i>Coroa</button>
+            <button class="p3d__part" type="button" data-part="1" aria-pressed="false" aria-controls="p3dInfo"><i class="ph-light ph-check" aria-hidden="true"><svg><use href="#i-check"/></svg></i>Pilar</button>
+            <button class="p3d__part" type="button" data-part="2" aria-pressed="false" aria-controls="p3dInfo"><i class="ph-light ph-check" aria-hidden="true"><svg><use href="#i-check"/></svg></i>Implante</button>
           </div>
           <div class="p3d__info" id="p3dInfo" aria-live="polite">
             <h3>Coroa, pilar e implante</h3>
@@ -1301,7 +1307,7 @@
         <div class="p3d__cta" data-reveal style="--d:3">
           <a class="btn btn--gold" data-wa="implante-3d" target="_blank" rel="noopener"
              href="https://wa.me/5511910050688?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20consulta%20sobre%20implantes%20dent%C3%A1rios.">
-            <i class="ph-fill ph-whatsapp-logo" aria-hidden="true"></i>Agendar consulta
+            <i class="ph-fill ph-whatsapp-logo" aria-hidden="true"><svg><use href="#if-whatsapp-logo"/></svg></i>Agendar consulta
           </a>
         </div>
       </div>
@@ -1322,7 +1328,7 @@
               </picture>
               <span class="case__tag case__tag--antes" aria-hidden="true">Antes</span>
               <span class="case__tag case__tag--depois" aria-hidden="true">Depois</span>
-              <span class="case__zoom" aria-hidden="true"><i class="ph-light ph-arrows-out-simple"></i></span>
+              <span class="case__zoom" aria-hidden="true"><i class="ph-light ph-arrows-out-simple" aria-hidden="true"><svg><use href="#i-arrows-out-simple"/></svg></i></span>
             </button>
             <button class="case" type="button" data-case="1" data-reveal style="--d:1" aria-label="Ampliar caso 2, antes e depois">
               <picture>
@@ -1331,7 +1337,7 @@
               </picture>
               <span class="case__tag case__tag--antes" aria-hidden="true">Antes</span>
               <span class="case__tag case__tag--depois" aria-hidden="true">Depois</span>
-              <span class="case__zoom" aria-hidden="true"><i class="ph-light ph-arrows-out-simple"></i></span>
+              <span class="case__zoom" aria-hidden="true"><i class="ph-light ph-arrows-out-simple" aria-hidden="true"><svg><use href="#i-arrows-out-simple"/></svg></i></span>
             </button>
             <button class="case" type="button" data-case="2" data-reveal style="--d:2" aria-label="Ampliar caso 3, antes e depois">
               <picture>
@@ -1340,7 +1346,7 @@
               </picture>
               <span class="case__tag case__tag--antes" aria-hidden="true">Antes</span>
               <span class="case__tag case__tag--depois" aria-hidden="true">Depois</span>
-              <span class="case__zoom" aria-hidden="true"><i class="ph-light ph-arrows-out-simple"></i></span>
+              <span class="case__zoom" aria-hidden="true"><i class="ph-light ph-arrows-out-simple" aria-hidden="true"><svg><use href="#i-arrows-out-simple"/></svg></i></span>
             </button>
             <button class="case" type="button" data-case="3" data-reveal style="--d:3" aria-label="Ampliar caso 4, antes e depois">
               <picture>
@@ -1349,7 +1355,7 @@
               </picture>
               <span class="case__tag case__tag--antes" aria-hidden="true">Antes</span>
               <span class="case__tag case__tag--depois" aria-hidden="true">Depois</span>
-              <span class="case__zoom" aria-hidden="true"><i class="ph-light ph-arrows-out-simple"></i></span>
+              <span class="case__zoom" aria-hidden="true"><i class="ph-light ph-arrows-out-simple" aria-hidden="true"><svg><use href="#i-arrows-out-simple"/></svg></i></span>
             </button>
           </div>
 
@@ -1357,7 +1363,7 @@
             <p class="proof__note">Os resultados podem variar de acordo com cada caso.</p>
             <a class="btn btn--gold" data-wa="casos" target="_blank" rel="noopener"
                href="https://wa.me/5511910050688?text=Ol%C3%A1!%20Vi%20os%20casos%20de%20antes%20e%20depois%20no%20site%20e%20gostaria%20de%20agendar%20uma%20consulta.">
-              <i class="ph-fill ph-whatsapp-logo" aria-hidden="true"></i>Agendar consulta
+              <i class="ph-fill ph-whatsapp-logo" aria-hidden="true"><svg><use href="#if-whatsapp-logo"/></svg></i>Agendar consulta
             </a>
           </div>
         </div>
@@ -1368,17 +1374,17 @@
             <div class="rating" data-reveal>
               <h2 id="aval-title" class="rating__num" aria-label="Nota 5,0 no Google">5,0</h2>
               <span class="stars" aria-hidden="true">
-                <i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i>
+                <i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i><i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i><i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i><i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i><i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i>
               </span>
               <p>Nota máxima em 36 avaliações de pacientes no Google.</p>
               <a class="tlink" target="_blank" rel="noopener"
                  href="https://www.google.com/maps/place/Clinica+Prosperare/@-23.5665146,-46.6515859,17z/data=!4m8!3m7!1s0x94ce59a0bcb95861:0xda0219cce0a1c5fb!8m2!3d-23.5665146!4d-46.6515859!9m1!1b1!16s%2Fg%2F11vf3jwjbm">
-                Ler todas no Google <i class="ph-light ph-arrow-up-right" aria-hidden="true"></i>
+                Ler todas no Google <i class="ph-light ph-arrow-up-right" aria-hidden="true"><svg><use href="#i-arrow-up-right"/></svg></i>
               </a>
             </div>
 
             <figure class="featured" data-reveal style="--d:1">
-              <i class="ph-fill ph-quotes" aria-hidden="true"></i>
+              <i class="ph-fill ph-quotes" aria-hidden="true"><svg><use href="#if-quotes"/></svg></i>
               <blockquote>
                 <p>“Meu implante ficou incrível, não doeu nadinha e a recuperação foi tranquila com um resultado que superou minhas expectativas.”</p>
               </blockquote>
@@ -1392,50 +1398,50 @@
           <div class="reviews" id="reviews" tabindex="0" aria-label="Mais avaliações de pacientes">
             <figure class="review" data-reveal>
               <div>
-                <span class="stars" aria-label="5 estrelas"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></span>
+                <span class="stars" role="img" aria-label="5 estrelas"><i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i><i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i><i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i><i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i><i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i></span>
                 <blockquote><p>“Eu tinha muito medo de fazer implantes, só ficava pensando na dor (…) É um dos procedimentos mais tranquilo que já realizei.”</p></blockquote>
               </div>
               <figcaption class="who"><span class="who__avatar" aria-hidden="true">MG</span><span class="who__text"><strong>Maria Gerusa O.</strong><span>Avaliação no Google</span></span></figcaption>
             </figure>
             <figure class="review" data-reveal style="--d:1">
               <div>
-                <span class="stars" aria-label="5 estrelas"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></span>
+                <span class="stars" role="img" aria-label="5 estrelas"><i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i><i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i><i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i><i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i><i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i></span>
                 <blockquote><p>“Me recebeu muito bem, me tranquilizou a todo momento durante as cirurgias e o atendimento não tem o que falar, A MELHOR!”</p></blockquote>
               </div>
               <figcaption class="who"><span class="who__avatar" aria-hidden="true">DF</span><span class="who__text"><strong>Daniel F.</strong><span>Avaliação no Google</span></span></figcaption>
             </figure>
             <figure class="review" data-reveal style="--d:2">
               <div>
-                <span class="stars" aria-label="5 estrelas"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></span>
+                <span class="stars" role="img" aria-label="5 estrelas"><i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i><i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i><i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i><i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i><i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i></span>
                 <blockquote><p>“Sabemos quão raro é encontrar uma dentista que seja detalhista, caprichosa e ética. A Dra. Sheilla é tudo isso, além de ser extremamente carismática.”</p></blockquote>
               </div>
               <figcaption class="who"><span class="who__avatar" aria-hidden="true">NI</span><span class="who__text"><strong>Natalia I.</strong><span>Avaliação no Google</span></span></figcaption>
             </figure>
             <figure class="review" data-reveal style="--d:3">
               <div>
-                <span class="stars" aria-label="5 estrelas"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></span>
+                <span class="stars" role="img" aria-label="5 estrelas"><i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i><i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i><i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i><i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i><i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i></span>
                 <blockquote><p>“Explica tudo com clareza, transmite segurança e realiza um trabalho de altíssima qualidade. Recomendo de olhos fechados!”</p></blockquote>
               </div>
               <figcaption class="who"><span class="who__avatar" aria-hidden="true">IS</span><span class="who__text"><strong>Isabella S.</strong><span>Avaliação no Google</span></span></figcaption>
             </figure>
             <figure class="review" data-reveal style="--d:4">
               <div>
-                <span class="stars" aria-label="5 estrelas"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></span>
+                <span class="stars" role="img" aria-label="5 estrelas"><i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i><i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i><i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i><i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i><i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i></span>
                 <blockquote><p>“Profissional comprometida e atenciosa. Respeita o horário agendado e esclarece suas dúvidas com clareza.”</p></blockquote>
               </div>
               <figcaption class="who"><span class="who__avatar" aria-hidden="true">RM</span><span class="who__text"><strong>Rita M.</strong><span>Avaliação no Google</span></span></figcaption>
             </figure>
             <figure class="review" data-reveal style="--d:5">
               <div>
-                <span class="stars" aria-label="5 estrelas"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></span>
+                <span class="stars" role="img" aria-label="5 estrelas"><i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i><i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i><i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i><i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i><i class="ph-fill ph-star" aria-hidden="true"><svg><use href="#if-star"/></svg></i></span>
                 <blockquote><p>“Ela é uma excelente profissional, muito atenciosa e cuidadosa. Confio muito em como ela faz. Com certeza a melhor dentista que já fui!”</p></blockquote>
               </div>
               <figcaption class="who"><span class="who__avatar" aria-hidden="true">MS</span><span class="who__text"><strong>Michele S.</strong><span>Avaliação no Google</span></span></figcaption>
             </figure>
           </div>
           <div class="reviews__nav">
-            <button class="icon-btn" type="button" id="revPrev" aria-label="Avaliação anterior" aria-controls="reviews"><i class="ph-light ph-arrow-left" aria-hidden="true"></i></button>
-            <button class="icon-btn" type="button" id="revNext" aria-label="Próxima avaliação" aria-controls="reviews"><i class="ph-light ph-arrow-right" aria-hidden="true"></i></button>
+            <button class="icon-btn" type="button" id="revPrev" aria-label="Avaliação anterior" aria-controls="reviews"><i class="ph-light ph-arrow-left" aria-hidden="true"><svg><use href="#i-arrow-left"/></svg></i></button>
+            <button class="icon-btn" type="button" id="revNext" aria-label="Próxima avaliação" aria-controls="reviews"><i class="ph-light ph-arrow-right" aria-hidden="true"><svg><use href="#i-arrow-right"/></svg></i></button>
           </div>
         </div>
       </div>
@@ -1447,7 +1453,7 @@
         <div class="about__media" data-reveal>
           <figure>
             <picture>
-              <source srcset="img/consultorio.webp" type="image/webp" />
+              <source srcset="img/consultorio-760.webp 760w, img/consultorio-1100.webp 1100w, img/consultorio.webp 1448w" sizes="(max-width: 899px) calc(100vw - 32px), (max-width: 1340px) 45vw, 580px" type="image/webp" />
               <img src="img/consultorio.jpg" alt="Consultório da Prosperare, com a cadeira odontológica e a logo da clínica na parede" width="1448" height="1086" loading="lazy" />
             </picture>
             <figcaption>Consultório da Prosperare, na Bela Vista.</figcaption>
@@ -1460,14 +1466,14 @@
 
           <div class="diffs">
             <div class="diff" data-reveal style="--d:2">
-              <span class="diff__icon"><i class="ph-light ph-seal-check" aria-hidden="true"></i></span>
+              <span class="diff__icon"><i class="ph-light ph-seal-check" aria-hidden="true"><svg><use href="#i-seal-check"/></svg></i></span>
               <div>
                 <h3>Alta taxa de sucesso</h3>
                 <p>Protocolos clínicos rigorosos e materiais de marcas reconhecidas internacionalmente, para resultados duradouros e previsíveis.</p>
               </div>
             </div>
             <div class="diff" data-reveal style="--d:3">
-              <span class="diff__icon"><i class="ph-light ph-hand-heart" aria-hidden="true"></i></span>
+              <span class="diff__icon"><i class="ph-light ph-hand-heart" aria-hidden="true"><svg><use href="#i-hand-heart"/></svg></i></span>
               <div>
                 <h3>Cuidado humanizado</h3>
                 <p>Atendimento acolhedor e personalizado, com foco no bem-estar do paciente em cada etapa, do diagnóstico ao acompanhamento pós-cirúrgico.</p>
@@ -1476,7 +1482,7 @@
           </div>
 
           <div class="rt" data-reveal style="--d:4">
-            <img src="img/logo-marca-branca.png" alt="" width="46" height="46" loading="lazy" />
+            <img src="img/logo-marca-branca-138.png" alt="" width="46" height="46" loading="lazy" />
             <div>
               <small>Responsável técnica</small>
               <strong>Dra. Sheilla Oliveira Ferreira</strong>
@@ -1512,9 +1518,9 @@
 </g>
 </svg>
             <div class="cmap__controls">
-              <button class="cmap__btn" type="button" data-zoom="in" aria-label="Aproximar o mapa"><i class="ph-light ph-plus" aria-hidden="true"></i></button>
-              <button class="cmap__btn" type="button" data-zoom="out" aria-label="Afastar o mapa"><i class="ph-light ph-minus" aria-hidden="true"></i></button>
-              <button class="cmap__btn" type="button" data-zoom="reset" aria-label="Centralizar na clínica"><i class="ph-light ph-crosshair" aria-hidden="true"></i></button>
+              <button class="cmap__btn" type="button" data-zoom="in" aria-label="Aproximar o mapa"><i class="ph-light ph-plus" aria-hidden="true"><svg><use href="#i-plus"/></svg></i></button>
+              <button class="cmap__btn" type="button" data-zoom="out" aria-label="Afastar o mapa"><i class="ph-light ph-minus" aria-hidden="true"><svg><use href="#i-minus"/></svg></i></button>
+              <button class="cmap__btn" type="button" data-zoom="reset" aria-label="Centralizar na clínica"><i class="ph-light ph-crosshair" aria-hidden="true"><svg><use href="#i-crosshair"/></svg></i></button>
             </div>
             <p class="cmap__hint" aria-hidden="true"><span class="cmap__hint--touch">Use dois dedos para mover o mapa</span><span class="cmap__hint--mouse">Arraste para mover. Ctrl + rolagem para zoom</span></p>
             <small class="cmap__credit">Mapa: © colaboradores do OpenStreetMap</small>
@@ -1522,7 +1528,7 @@
 
           <div class="info">
             <div class="info__item" data-reveal>
-              <span class="info__icon"><i class="ph-light ph-map-pin" aria-hidden="true"></i></span>
+              <span class="info__icon"><i class="ph-light ph-map-pin" aria-hidden="true"><svg><use href="#i-map-pin"/></svg></i></span>
               <div>
                 <h3>Endereço</h3>
                 <a class="val" target="_blank" rel="noopener"
@@ -1533,7 +1539,7 @@
             </div>
 
             <div class="info__item" data-reveal style="--d:1">
-              <span class="info__icon"><i class="ph-light ph-train" aria-hidden="true"></i></span>
+              <span class="info__icon"><i class="ph-light ph-train" aria-hidden="true"><svg><use href="#i-train"/></svg></i></span>
               <div>
                 <h3>Como chegar</h3>
                 <p>Próximo à Av. Paulista e à estação Brigadeiro do metrô (Linha 2-Verde).</p>
@@ -1541,7 +1547,7 @@
             </div>
 
             <div class="info__item" data-reveal style="--d:2">
-              <span class="info__icon"><i class="ph-light ph-wheelchair" aria-hidden="true"></i></span>
+              <span class="info__icon"><i class="ph-light ph-wheelchair" aria-hidden="true"><svg><use href="#i-wheelchair"/></svg></i></span>
               <div>
                 <h3>Acessibilidade</h3>
                 <p>Entrada acessível para pessoas em cadeira de rodas.</p>
@@ -1549,7 +1555,7 @@
             </div>
 
             <div class="info__item" data-reveal style="--d:3">
-              <span class="info__icon"><i class="ph-light ph-whatsapp-logo" aria-hidden="true"></i></span>
+              <span class="info__icon"><i class="ph-light ph-whatsapp-logo" aria-hidden="true"><svg><use href="#i-whatsapp-logo"/></svg></i></span>
               <div>
                 <h3>WhatsApp</h3>
                 <a class="val" data-wa="contato-numero" target="_blank" rel="noopener"
@@ -1559,18 +1565,18 @@
 
             <div class="arrive" data-reveal style="--d:4">
               <picture>
-                <source srcset="img/fachada.webp" type="image/webp" />
-                <img src="img/fachada.jpg" alt="Fachada do edifício Avenida Paulista First Class Offices, número 598" width="576" height="1024" loading="lazy" />
+                <source srcset="img/fachada-288.webp" type="image/webp" />
+                <img src="img/fachada-288.jpg" alt="Fachada do edifício Avenida Paulista First Class Offices, número 598" width="288" height="512" loading="lazy" />
               </picture>
               <div>
                 <p>Entrada pelo edifício <strong>Avenida Paulista First Class Offices</strong>, nº 598.</p>
                 <div class="arrive__links">
                   <a class="tlink" target="_blank" rel="noopener"
                      href="https://www.google.com/maps/dir/?api=1&amp;destination=Clinica+Prosperare%2C+Alameda+Joaquim+Eug%C3%AAnio+de+Lima%2C+598+-+Bela+Vista%2C+S%C3%A3o+Paulo+-+SP">
-                    Google Maps <i class="ph-light ph-arrow-up-right" aria-hidden="true"></i>
+                    Google Maps <i class="ph-light ph-arrow-up-right" aria-hidden="true"><svg><use href="#i-arrow-up-right"/></svg></i>
                   </a>
                   <a class="tlink" target="_blank" rel="noopener" href="https://waze.com/ul?ll=-23.5665146,-46.6515859&amp;navigate=yes">
-                    Waze <i class="ph-light ph-arrow-up-right" aria-hidden="true"></i>
+                    Waze <i class="ph-light ph-arrow-up-right" aria-hidden="true"><svg><use href="#i-arrow-up-right"/></svg></i>
                   </a>
                 </div>
               </div>
@@ -1578,7 +1584,7 @@
 
             <a class="btn btn--gold btn--block" data-wa="contato" data-reveal style="--d:5" target="_blank" rel="noopener"
                href="https://wa.me/5511910050688?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20consulta%20na%20Prosperare.">
-              <i class="ph-fill ph-whatsapp-logo" aria-hidden="true"></i>Agendar consulta
+              <i class="ph-fill ph-whatsapp-logo" aria-hidden="true"><svg><use href="#if-whatsapp-logo"/></svg></i>Agendar consulta
             </a>
           </div>
         </div>
@@ -1589,12 +1595,12 @@
   <!-- ============ FOOTER ============ -->
   <footer class="footer">
     <div class="wrap final" id="agendar">
-      <img class="final__mark" src="img/logo-dourado.png" alt="" aria-hidden="true" loading="lazy" />
+      <img class="final__mark" src="img/logo-dourado.webp" alt="" aria-hidden="true" loading="lazy" />
       <h2 data-reveal>Pronto para transformar <em>seu sorriso?</em></h2>
       <p data-reveal style="--d:1">Entre em contato agora e dê o primeiro passo rumo a uma vida com mais saúde e confiança.</p>
       <a class="btn btn--gold" data-wa="final" data-reveal style="--d:2" target="_blank" rel="noopener"
          href="https://wa.me/5511910050688?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20consulta%20na%20Prosperare.">
-        <i class="ph-fill ph-whatsapp-logo" aria-hidden="true"></i>Agendar consulta
+        <i class="ph-fill ph-whatsapp-logo" aria-hidden="true"><svg><use href="#if-whatsapp-logo"/></svg></i>Agendar consulta
       </a>
       <small data-reveal style="--d:3">ou chame no WhatsApp <a data-wa="final-numero" target="_blank" rel="noopener" href="https://wa.me/5511910050688?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20consulta%20na%20Prosperare.">(11) 91005-0688</a></small>
     </div>
@@ -1604,7 +1610,7 @@
         <div class="foot__grid">
           <div class="foot__about">
             <a href="#inicio" class="brand" aria-label="Prosperare, voltar ao início">
-              <img src="img/logo-marca-branca.png" alt="" width="34" height="34" loading="lazy" />
+              <img src="img/logo-marca-branca-138.png" alt="" width="34" height="34" loading="lazy" />
               <span>Prosperare</span>
             </a>
             <p>Especialistas em implantes dentários com tecnologia avançada e cuidado humanizado em São Paulo.</p>
@@ -1623,9 +1629,9 @@
           <div>
             <h3>Contato</h3>
             <ul>
-              <li><a data-wa="rodape" target="_blank" rel="noopener" href="https://wa.me/5511910050688?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20consulta%20na%20Prosperare."><i class="ph-light ph-whatsapp-logo" aria-hidden="true"></i>(11) 91005-0688</a></li>
-              <li><a target="_blank" rel="noopener" href="https://www.google.com/maps/place/Clinica+Prosperare/@-23.5665146,-46.6515859,17z/data=!4m6!3m5!1s0x94ce59a0bcb95861:0xda0219cce0a1c5fb!8m2!3d-23.5665146!4d-46.6515859!16s%2Fg%2F11vf3jwjbm"><i class="ph-light ph-map-pin" aria-hidden="true"></i>Bela Vista, São Paulo, SP</a></li>
-              <li><a href="login.html"><i class="ph-light ph-user-circle" aria-hidden="true"></i>Área do Colaborador</a></li>
+              <li><a data-wa="rodape" target="_blank" rel="noopener" href="https://wa.me/5511910050688?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20consulta%20na%20Prosperare."><i class="ph-light ph-whatsapp-logo" aria-hidden="true"><svg><use href="#i-whatsapp-logo"/></svg></i>(11) 91005-0688</a></li>
+              <li><a target="_blank" rel="noopener" href="https://www.google.com/maps/place/Clinica+Prosperare/@-23.5665146,-46.6515859,17z/data=!4m6!3m5!1s0x94ce59a0bcb95861:0xda0219cce0a1c5fb!8m2!3d-23.5665146!4d-46.6515859!16s%2Fg%2F11vf3jwjbm"><i class="ph-light ph-map-pin" aria-hidden="true"><svg><use href="#i-map-pin"/></svg></i>Bela Vista, São Paulo, SP</a></li>
+              <li><a href="login.html"><i class="ph-light ph-user-circle" aria-hidden="true"><svg><use href="#i-user-circle"/></svg></i>Área do Colaborador</a></li>
             </ul>
           </div>
         </div>
@@ -1641,16 +1647,16 @@
   <!-- ============ WHATSAPP FLUTUANTE ============ -->
   <a class="wa-float" id="waFloat" data-wa="flutuante" target="_blank" rel="noopener" aria-label="Agendar consulta pelo WhatsApp"
      href="https://wa.me/5511910050688?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20consulta%20na%20Prosperare.">
-    <i class="ph-fill ph-whatsapp-logo" aria-hidden="true"></i>
+    <i class="ph-fill ph-whatsapp-logo" aria-hidden="true"><svg><use href="#if-whatsapp-logo"/></svg></i>
   </a>
 
   <!-- ============ LIGHTBOX ============ -->
   <dialog class="lb" id="lightbox" aria-label="Caso antes e depois ampliado">
     <div class="lb__frame" id="lbFrame">
       <img id="lbImg" alt="" width="520" height="650" />
-      <button class="icon-btn lb__close" type="button" id="lbClose" aria-label="Fechar"><i class="ph-light ph-x" aria-hidden="true"></i></button>
-      <button class="icon-btn lb__prev" type="button" id="lbPrev" aria-label="Caso anterior"><i class="ph-light ph-arrow-left" aria-hidden="true"></i></button>
-      <button class="icon-btn lb__next" type="button" id="lbNext" aria-label="Próximo caso"><i class="ph-light ph-arrow-right" aria-hidden="true"></i></button>
+      <button class="icon-btn lb__close" type="button" id="lbClose" aria-label="Fechar"><i class="ph-light ph-x" aria-hidden="true"><svg><use href="#i-x"/></svg></i></button>
+      <button class="icon-btn lb__prev" type="button" id="lbPrev" aria-label="Caso anterior"><i class="ph-light ph-arrow-left" aria-hidden="true"><svg><use href="#i-arrow-left"/></svg></i></button>
+      <button class="icon-btn lb__next" type="button" id="lbNext" aria-label="Próximo caso"><i class="ph-light ph-arrow-right" aria-hidden="true"><svg><use href="#i-arrow-right"/></svg></i></button>
     </div>
     <p class="lb__count" id="lbCount" aria-live="polite"></p>
   </dialog>
@@ -1663,6 +1669,11 @@
 
     // iOS Safari só mostra :active (resposta na pressão) com um ouvinte de toque registrado
     document.addEventListener('touchstart', () => {}, { passive: true });
+
+    // links internos (#secao): as seções adiadas passam a ter o tamanho real antes de a rolagem começar
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('a[href^="#"]')) document.documentElement.classList.add('cv-done');
+    }, true);
 
     /* ---- Ano no rodapé ---- */
     $('#year').textContent = new Date().getFullYear();
@@ -1919,27 +1930,39 @@
       let s = reduceMotion ? 1 : 0.82, tx = 0, ty = 0;
 
       const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+      let shownS = 0;
       const apply = () => {
         s = clamp(s, MIN, MAX);
         const lx = Math.max(0, 540 * s - 220), ly = Math.max(0, 480 * s - 160);
         tx = clamp(tx, -lx, lx);
         ty = clamp(ty, -ly, ly);
         view.style.transform = `translate(${tx}px, ${ty}px) scale(${s})`;
-        view.style.setProperty('--ks', 1 / s);
-        keeps.forEach((k) => { k.style.transform = `scale(${1 / s})`; });
+        if (s !== shownS) { // rótulos e pinos só se recalculam quando o zoom muda (arrastar não mexe neles)
+          shownS = s;
+          view.style.setProperty('--ks', 1 / s);
+          keeps.forEach((k) => { k.style.transform = `scale(${1 / s})`; });
+        }
       };
-      const ppu = () => { const r = svg.getBoundingClientRect(); return Math.max(r.width / 900, r.height / 600); };
+      // gestos e rolagem: no máximo uma aplicação por quadro
+      let applyId = 0;
+      const schedule = () => { if (!applyId) applyId = requestAnimationFrame(() => { applyId = 0; geo = null; apply(); }); };
+      // posição do mapa lida no máximo uma vez por quadro (sem intercalar leitura e escrita de layout)
+      let geo = null;
+      const rectNow = () => geo || (geo = svg.getBoundingClientRect());
+      const ppu = () => { const r = rectNow(); return Math.max(r.width / 900, r.height / 600); };
       const toUser = (x, y) => {
-        const r = svg.getBoundingClientRect(), k = ppu();
+        const r = rectNow(), k = ppu();
         return [(x - r.left - r.width / 2) / k, (y - r.top - r.height / 2) / k];
       };
-      const zoomAt = (ux, uy, next) => {
+      const zoomAt = (ux, uy, next, later) => {
         next = clamp(next, MIN, MAX);
         tx = ux - (ux - tx) * (next / s);
         ty = uy - (uy - ty) * (next / s);
         s = next;
-        apply();
+        if (later) schedule(); else apply();
       };
+      addEventListener('scroll', () => { geo = null; }, { passive: true });
+      addEventListener('resize', () => { geo = null; });
       const animate = (fn) => {
         cmap.classList.add('is-anim');
         fn();
@@ -1975,7 +1998,7 @@
         e.preventDefault();
         used();
         const [ux, uy] = toUser(e.clientX, e.clientY);
-        zoomAt(ux, uy, s * Math.exp(-e.deltaY * 0.0025));
+        zoomAt(ux, uy, s * Math.exp(-e.deltaY * 0.0025), true);
       }, { passive: false });
 
       // mouse: arrastar. Toque: dois dedos movem e dão zoom; um dedo rola a página.
@@ -2010,7 +2033,7 @@
 
       cmap.addEventListener('pointerdown', (e) => {
         if (e.target.closest('button') || (e.pointerType === 'mouse' && e.button !== 0)) return;
-        stopGlide(); vx = vy = 0; lastT = performance.now();
+        stopGlide(); vx = vy = 0; lastT = performance.now(); geo = null;
         pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
         if (e.pointerType === 'mouse') { cmap.setPointerCapture(e.pointerId); cmap.classList.add('is-dragging'); }
         last = pts.size === 2 ? pair() : null;
@@ -2023,13 +2046,13 @@
           const k = ppu();
           const dxu = (e.clientX - prev.x) / k, dyu = (e.clientY - prev.y) / k;
           tx += dxu; ty += dyu; track(dxu, dyu);
-          apply(); used();
+          schedule(); used();
         } else if (pts.size === 2 && last) {
           const now = pair(), k = ppu();
           const dxu = (now.x - last.x) / k, dyu = (now.y - last.y) / k;
           tx += dxu; ty += dyu; track(dxu, dyu);
           const [ux, uy] = toUser(now.x, now.y);
-          zoomAt(ux, uy, s * (now.d / last.d));
+          zoomAt(ux, uy, s * (now.d / last.d), true);
           last = now; used();
         }
       });
@@ -2088,7 +2111,7 @@
           const p = document.createElement('p'); p.textContent = TEXTS[a][1];
           const s = document.createElement('small');
           if (state.pinned >= 0) {
-            s.innerHTML = '<i class="ph-fill ph-push-pin" aria-hidden="true"></i>';
+            s.innerHTML = '<i class="ph-fill ph-push-pin" aria-hidden="true"><svg><use href="#if-push-pin"/></svg></i>';
             s.append(coarse.matches ? 'Destaque fixado. Toque de novo para reunir as peças.' : 'Destaque fixado. Clique de novo na peça para soltar.');
           } else {
             s.textContent = 'Clique para manter o destaque.';
@@ -2111,45 +2134,63 @@
     const setHover = (i) => { if (state.hover !== i) { state.hover = i; render(); } };
     partBtns.forEach((b) => b.addEventListener('click', () => pin(Number(b.dataset.part))));
 
-    /* ---- Carregamento sob demanda + alternativa estática ---- */
+    /* ---- Carregamento por proximidade + alternativa estática ----
+       Visualizador local (Three.js r128 + GLTFLoader + decodificador meshopt, um arquivo) baixado
+       em paralelo com o modelo. Só começa depois do carregamento da página, com 1,5 tela de antecedência.
+       Sem WebGL (ou se algo falhar), fica a imagem explicativa. */
     const fail = () => stage.classList.add('is-failed');
-    const hasWebGL = (() => {
-      try {
-        const c = document.createElement('canvas');
-        return !!(window.WebGLRenderingContext && (c.getContext('webgl') || c.getContext('experimental-webgl')));
-      } catch (e) { return false; }
-    })();
-    if (!hasWebGL) { fail(); return; }
+    if (!window.WebGLRenderingContext) { fail(); return; }
     const loadScript = (src) => new Promise((ok, ko) => {
       const s = document.createElement('script');
-      s.src = src; s.onload = ok; s.onerror = ko;
+      s.src = src; s.async = true; s.fetchPriority = 'high'; s.onload = ok; s.onerror = ko;
       document.head.appendChild(s);
     });
-    let started = false;
-    const loader = new IntersectionObserver(async ([entry]) => {
-      if (!entry.isIntersecting || started) return;
-      started = true;
-      loader.disconnect();
+    const start = async () => {
       try {
-        if (!window.THREE) await loadScript('https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js');
-        if (!window.THREE.GLTFLoader) await loadScript('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js');
-        new THREE.GLTFLoader().load(stage.dataset.model, (gltf) => {
-          try { model = build(gltf); } catch (err) { console.error(err); fail(); }
-        }, undefined, (err) => { console.error(err); fail(); });
+        const [buf] = await Promise.all([
+          fetch(stage.dataset.model, { priority: 'high' }).then((r) => { if (!r.ok) throw new Error('modelo: HTTP ' + r.status); return r.arrayBuffer(); }),
+          window.THREE && window.THREE.GLTFLoader ? null : loadScript(stage.dataset.viewer),
+        ]);
+        const T = window.THREE;
+        await T.MeshoptDecoder.ready;
+        new T.GLTFLoader().setMeshoptDecoder(T.MeshoptDecoder).parse(buf, '', (gltf) => {
+          build(gltf).then((m) => { model = m; }).catch((err) => { console.error(err); fail(); });
+        }, (err) => { console.error(err); fail(); });
       } catch (err) { console.error(err); fail(); }
-    }, { rootMargin: '500px 0px' });
-    loader.observe(stage);
+    };
+    // a montagem da cena é feita em etapas, devolvendo o controle ao navegador entre elas (sem tarefa longa única)
+    const pause = () => new Promise((r) => setTimeout(r, 0));
+    // começa quando o palco está a até 1,5 tela E o visitante já rolou a página (ou o palco já está à vista):
+    // a inicialização não disputa o processador com a primeira tela de quem ainda nem começou a ler
+    const watch = () => {
+      let near = false, scrolled = false, begun = false;
+      const go = () => { if (begun) return; begun = true; io.disconnect(); removeEventListener('scroll', onScroll); start(); };
+      const onScroll = () => { scrolled = true; if (near) go(); };
+      const io = new IntersectionObserver(([entry]) => {
+        near = entry.isIntersecting;
+        const onScreen = entry.boundingClientRect.top < innerHeight && entry.boundingClientRect.bottom > 0;
+        if (near && (scrolled || onScreen)) go();
+      }, { rootMargin: '150% 0px' });
+      io.observe(stage);
+      addEventListener('scroll', onScroll, { passive: true });
+    };
+    if (document.readyState === 'complete') watch(); else addEventListener('load', watch, { once: true });
 
-    function build(gltf) {
+    async function build(gltf) {
       const T = window.THREE;
       const canvas = document.getElementById('p3dCanvas');
       const renderer = new T.WebGLRenderer({ canvas, antialias: true, alpha: true });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      // resolução interna: até 2x; desce em passos se os quadros ficarem lentos de forma sustentada
+      const DPR_MAX = Math.min(window.devicePixelRatio || 1, 2);
+      const DPR_MIN = DPR_MAX >= 1.5 ? 1.25 : DPR_MAX;
+      let dpr = DPR_MAX;
+      renderer.setPixelRatio(dpr);
       renderer.outputEncoding = T.sRGBEncoding;
       renderer.toneMapping = T.ACESFilmicToneMapping;
       renderer.toneMappingExposure = 1.0;
       const scene = new T.Scene();
       const camera = new T.PerspectiveCamera(30, 1, 0.05, 100);
+      await pause();
 
       /* Ambiente de estúdio gerado aqui (sem HDRI externo): dá o acetinado do titânio */
       const pmrem = new T.PMREMGenerator(renderer);
@@ -2171,6 +2212,8 @@
       });
       scene.environment = pmrem.fromScene(envScene, 0.04).texture;
       pmrem.dispose();
+      envScene.traverse((o) => { if (o.isMesh) { o.geometry.dispose(); o.material.dispose(); } });
+      await pause();
       scene.add(new T.HemisphereLight(0xf4efe6, 0x0a1320, 0.4));
       const key = new T.DirectionalLight(0xfff3e4, 1.1); key.position.set(3, 5, 4); scene.add(key);
       const fill = new T.DirectionalLight(0xbfd0f0, 0.35); fill.position.set(-4, 1.5, 2); scene.add(fill);
@@ -2199,6 +2242,48 @@
       const META = [{ cy: 0.00353, r: 0.52 }, { cy: 0.00157, r: 0.2 }, { cy: 0.00586, r: 0.22 }];
 
       const invisible = new T.MeshBasicMaterial({ visible: false });
+
+      /* Seleção acelerada (resultado idêntico ao raycast padrão do three): os triângulos de cada malha
+         ficam em faixas de altura com caixa própria, e o raio só testa as faixas que atravessa. */
+      const _inv = new T.Matrix4(), _ray = new T.Ray(), _sph = new T.Sphere();
+      const _a = new T.Vector3(), _b = new T.Vector3(), _c = new T.Vector3(), _hit = new T.Vector3();
+      const BANDS = 24;
+      const bandsOf = (g) => {
+        if (g.userData.bands) return g.userData.bands;
+        if (!g.boundingBox) g.computeBoundingBox();
+        if (!g.boundingSphere) g.computeBoundingSphere();
+        const pos = g.attributes.position, idx = g.index.array;
+        const y0 = g.boundingBox.min.y, span = (g.boundingBox.max.y - y0) || 1;
+        const bands = Array.from({ length: BANDS }, () => ({ tris: [], box: new T.Box3() }));
+        for (let t = 0; t < idx.length; t += 3) {
+          const cy = (pos.getY(idx[t]) + pos.getY(idx[t + 1]) + pos.getY(idx[t + 2])) / 3;
+          const band = bands[Math.min(BANDS - 1, Math.floor(((cy - y0) / span) * BANDS))];
+          band.tris.push(t);
+          for (let k = 0; k < 3; k++) band.box.expandByPoint(_a.fromBufferAttribute(pos, idx[t + k]));
+        }
+        return (g.userData.bands = bands.filter((b) => b.tris.length).map((b) => ({ tris: Uint32Array.from(b.tris), box: b.box })));
+      };
+      function fastRaycast(raycaster, intersects) {
+        const g = this.geometry;
+        _sph.copy(g.boundingSphere).applyMatrix4(this.matrixWorld);
+        if (!raycaster.ray.intersectsSphere(_sph)) return;
+        _inv.copy(this.matrixWorld).invert();
+        _ray.copy(raycaster.ray).applyMatrix4(_inv);
+        const pos = g.attributes.position, idx = g.index.array, cull = this.material.side !== T.DoubleSide;
+        let best = Infinity;
+        for (const band of g.userData.bands) {
+          if (!_ray.intersectsBox(band.box)) continue;
+          for (let j = 0; j < band.tris.length; j++) {
+            const t = band.tris[j];
+            _a.fromBufferAttribute(pos, idx[t]); _b.fromBufferAttribute(pos, idx[t + 1]); _c.fromBufferAttribute(pos, idx[t + 2]);
+            if (!_ray.intersectTriangle(_a, _b, _c, cull, _hit)) continue;
+            const d = raycaster.ray.origin.distanceTo(_hit.applyMatrix4(this.matrixWorld));
+            if (d < best && d >= raycaster.near && d <= raycaster.far) best = d;
+          }
+        }
+        if (best < Infinity) intersects.push({ distance: best, object: this });
+      }
+      const accelerate = (m) => { bandsOf(m.geometry); m.raycast = fastRaycast; };
       const restSet = [];   // cópias invisíveis na posição montada (seleção estável)
       const sticky = [];    // volume de cada peça cobrindo da posição inicial à mais afastada
       const parts = NAMES.map((name, i) => {
@@ -2218,15 +2303,19 @@
         });
         // contorno dourado discreto (casco invertido, sem aumentar a peça visível)
         const outlineMat = new T.MeshBasicMaterial({ color: 0xd4b07a, side: T.BackSide, transparent: true, opacity: 0, depthWrite: false });
+        const outlines = [];
         meshes.forEach((m) => {
+          accelerate(m);
           m.geometry.computeBoundingBox();
           const center = m.geometry.boundingBox.getCenter(new T.Vector3());
           const o = new T.Mesh(m.geometry, outlineMat);
           o.scale.setScalar(1.035);
           o.position.copy(center).multiplyScalar(-0.035);
           o.raycast = () => {};
-          m.add(o);
+          o.visible = false; // opacidade 0: não desenha
+          m.add(o); outlines.push(o);
           const ghost = new T.Mesh(m.geometry, invisible);
+          ghost.raycast = fastRaycast;
           ghost.position.set(0, BASE[i], 0);
           ghost.userData.part = i;
           ghost.userData.base = BASE[i];
@@ -2234,7 +2323,7 @@
           restSet.push(ghost);
         });
         node.position.y = BASE[i];
-        return { node, meshes, mats, outlineMat, ...META[i] };
+        return { node, meshes, mats, outlineMat, outlines, lastO: 0, lastDim: -1, ...META[i] };
       });
       // pilar: área de toque/hover um pouco maior no trecho exposto entre coroa e implante
       const pilarZone = new T.Mesh(new T.CylinderGeometry(0.0031, 0.0031, 0.0045, 24), invisible);
@@ -2245,6 +2334,7 @@
       sticky[1] = cyl(0.0025, BASE[1] - 0.0007, BASE[1] + PROX[1] + EXTRA[2][1] + 0.0039);
       sticky[2] = cyl(0.0023, 0, BASE[1] + 0.0002);
       const pickables = parts.flatMap((p) => p.meshes);
+      await pause();
 
       // sombra de apoio sob o implante
       const sc = document.createElement('canvas');
@@ -2323,28 +2413,32 @@
       const lineEl = lines.querySelector('line'), dotEl = lines.querySelector('circle');
       const callout = document.getElementById('p3dCallout');
       const calloutText = callout.querySelector('span');
-      const v3 = new T.Vector3(), right = new T.Vector3();
+      const v3 = new T.Vector3(), right = new T.Vector3(), center = new T.Vector3();
       let w = 1, h = 1, lastCall = -1;
-      const project = (v) => { v.project(camera); return [(v.x * 0.5 + 0.5) * w, (-v.y * 0.5 + 0.5) * h]; };
+      // tamanho da legenda em cache: mede só quando o texto muda (e quando as fontes chegam)
+      let cw = 0, ch = 0, shownAlpha = -1, shownPinned = null;
+      const measureCallout = () => { cw = callout.offsetWidth; ch = callout.offsetHeight; };
+      new ResizeObserver(measureCallout).observe(callout);
       const placeCallout = (a) => {
         const show = a >= 0 && w >= 520 && zoom.x > 0.8;
         callA.to = show ? 1 : 0;
         const alpha = callA.x;
-        lines.style.opacity = alpha; callout.style.opacity = alpha;
+        const ra = Math.round(alpha * 1000) / 1000;
+        if (ra !== shownAlpha) { shownAlpha = ra; lines.style.opacity = ra; callout.style.opacity = ra; }
         if (a >= 0 && (a !== lastCall || alpha < 0.02)) { draw.x = 0; draw.v = 0; } // nova ligação: redesenha
         draw.to = 1;
         if (a >= 0) lastCall = a;
         if (alpha < 0.01 || lastCall < 0) return;
-        if (calloutText.textContent !== TEXTS[lastCall][0]) calloutText.textContent = TEXTS[lastCall][0];
-        callout.classList.toggle('is-pinned', state.pinned === lastCall);
+        if (calloutText.textContent !== TEXTS[lastCall][0]) { calloutText.textContent = TEXTS[lastCall][0]; measureCallout(); }
+        const pinned = state.pinned === lastCall;
+        if (pinned !== shownPinned) { shownPinned = pinned; callout.classList.toggle('is-pinned', pinned); }
         const p = parts[lastCall];
         right.setFromMatrixColumn(camera.matrixWorld, 0);
-        v3.set(0, p.cy, 0); p.node.localToWorld(v3);
-        const center = v3.clone();
-        const [, cy] = project(v3.copy(center));
-        const [ex] = project(v3.copy(center).addScaledVector(right, p.r));
-        const ax = ex + 6;
-        const cw = callout.offsetWidth, ch = callout.offsetHeight;
+        center.set(0, p.cy, 0); p.node.localToWorld(center);
+        v3.copy(center).project(camera);
+        const cy = (-v3.y * 0.5 + 0.5) * h;
+        v3.copy(center).addScaledVector(right, p.r).project(camera);
+        const ax = (v3.x * 0.5 + 0.5) * w + 6;
         const lx = Math.min(w - cw - 12, Math.max(w * 0.66, ax + 30));
         const ly = Math.min(h - ch - 60, Math.max(56, cy - ch / 2));
         callout.style.transform = `translate3d(${(lx + (1 - alpha) * 8).toFixed(1)}px, ${ly.toFixed(1)}px, 0)`;
@@ -2367,14 +2461,28 @@
       /* Hover estável: entrar responde na hora; sair espera 150 ms.
          Troca de peça só quando a peça real E a posição de repouso concordam;
          a peça em exploração continua ativa enquanto o cursor estiver no seu volume (inicial -> afastada). */
-      let mouse = null, leaveTimer = 0, dragging = false, overUI = false;
+      let mouse = null, leaveTimer = 0, dragging = false, overUI = false, hoverDirty = false, movedLast = false;
       const scheduleLeave = () => {
         if (leaveTimer || state.hover < 0) return;
         leaveTimer = setTimeout(() => { leaveTimer = 0; setHover(-1); }, 150);
       };
       const cancelLeave = () => { clearTimeout(leaveTimer); leaveTimer = 0; };
+      // cursor longe do conjunto (inclusive na maior separação): nenhuma peça pode estar sob ele, sem raycast
+      const nearModel = (x, y) => {
+        segP.set(0, 0, 0).project(camera); const ax = (segP.x * 0.5 + 0.5) * w, ay = (-segP.y * 0.5 + 0.5) * h;
+        segP.set(0, MAX_TOP * 100, 0).project(camera); const bx = (segP.x * 0.5 + 0.5) * w, by = (-segP.y * 0.5 + 0.5) * h;
+        segP.set(0.6, MAX_TOP * 50, 0).project(camera); const rx = Math.abs((segP.x * 0.5 + 0.5) * w - (ax + bx) / 2);
+        const vx = bx - ax, vy = by - ay, len2 = vx * vx + vy * vy || 1;
+        const k = Math.min(1, Math.max(0, ((x - ax) * vx + (y - ay) * vy) / len2));
+        return Math.hypot(x - (ax + k * vx), y - (ay + k * vy)) < rx * 1.3 + 24;
+      };
       const updateHover = () => {
         if (!mouse || dragging) return;
+        if (!nearModel(mouse.x, mouse.y)) {
+          stage.classList.remove('is-pointing');
+          if (state.pinned < 0) scheduleLeave();
+          return;
+        }
         const cur = pickCurrent(mouse.x, mouse.y);
         stage.classList.toggle('is-pointing', cur >= 0);
         if (state.pinned >= 0) return; // seleção fixada não é substituída pelo hover
@@ -2387,15 +2495,34 @@
       };
 
       /* Quadro: só desenha enquanto algo muda e a seção está visível */
-      let raf = 0, visible = true, lastT = 0;
+      /* Um único agendador de quadros (kick). Pausa fora da tela e com a aba oculta;
+         ao voltar, recomeça sem salto (lastT zerado). */
+      let raf = 0, visible = true, lastT = 0, rect = null, ready = false;
+      let frames = 0, slowSum = 0, calmWindows = 0;
       const restoreBtn = document.getElementById('p3dRestore');
       const zoomIn = stage.querySelector('[data-tool="in"]');
       const zoomOut = stage.querySelector('[data-tool="out"]');
-      function kick() { if (!raf && visible) raf = requestAnimationFrame(loop); }
+      const ui = { home: null, zin: null, zout: null };
+      function kick() { if (!raf && visible && !document.hidden) raf = requestAnimationFrame(loop); }
+      const setDpr = (v) => { dpr = v; renderer.setPixelRatio(dpr); renderer.setSize(w, h, false); };
       function loop(t) {
         raf = 0;
+        // só o giro automático, sem ninguém interagindo: até ~60 quadros/s também em telas de 90/120 Hz
+        if (lastT && t - lastT < 15 && !mouse && !pointers.size && !dragging) { raf = requestAnimationFrame(loop); return; }
         const dt = lastT ? Math.min(0.1, (t - lastT) / 1000) : 0.016;
+        // resolução adaptativa: média de 90 quadros seguidos; reduz se < ~40 q/s, volta a subir com folga
+        if (lastT) {
+          slowSum += t - lastT;
+          if (++frames === 90) {
+            const avg = slowSum / frames;
+            if (avg > 25 && dpr > DPR_MIN) { setDpr(Math.max(DPR_MIN, dpr - 0.25)); calmWindows = 0; }
+            else if (avg < 18 && dpr < DPR_MAX && ++calmWindows >= 3) { setDpr(Math.min(DPR_MAX, dpr + 0.25)); calmWindows = 0; }
+            frames = 0; slowSum = 0;
+          }
+        } else { frames = 0; slowSum = 0; }
         lastT = t;
+        // hover com a imagem que está na tela (quadro anterior): no máximo uma vez por quadro
+        if (hoverDirty || movedLast) { hoverDirty = false; updateHover(); }
         const a = active();
         if (a !== lastActive) { // cascata: a peça ativa sai primeiro; ao reunir, as mais distantes voltam primeiro
           const leader = a >= 0 ? a : lastActive;
@@ -2435,11 +2562,15 @@
 
         parts.forEach((p, i) => {
           p.node.position.y = BASE[i] + off[i].x + press[i].x + INTRO[i] * intro[i].x;
-          p.outlineMat.opacity = Math.min(1, glow[i].x + pressGlow[i].x);
-          p.mats.forEach((m) => {
-            m.color.copy(m.userData.base).lerp(SHADE, 0.6 * dim[i].x);
-            m.envMapIntensity = m.userData.env * (1 - 0.5 * dim[i].x);
-          });
+          const o = Math.min(1, glow[i].x + pressGlow[i].x);
+          if (o !== p.lastO) { p.lastO = o; p.outlineMat.opacity = o; p.outlines.forEach((m) => { m.visible = o > 0.002; }); }
+          if (dim[i].x !== p.lastDim) {
+            p.lastDim = dim[i].x;
+            p.mats.forEach((m) => {
+              m.color.copy(m.userData.base).lerp(SHADE, 0.6 * dim[i].x);
+              m.envMapIntensity = m.userData.env * (1 - 0.5 * dim[i].x);
+            });
+          }
         });
         // enquadramento centralizado no conjunto: acompanha a abertura geral (não a peça apontada),
         // com folga para o extra da peça, então nada sai da tela nem "foge" do cursor
@@ -2451,16 +2582,18 @@
         const pp = rubber(pol.x, POL_MIN, POL_MAX);
         camera.position.set(dist * Math.sin(pp) * Math.sin(az.x), ty + dist * Math.cos(pp), dist * Math.sin(pp) * Math.cos(az.x));
         camera.lookAt(0, ty, 0);
-        camera.updateProjectionMatrix();
         camera.updateMatrixWorld();
         renderer.render(scene, camera);
+        if (!ready) { ready = true; stage.classList.add('is-ready'); } // o pôster sai só com o primeiro quadro pronto
         placeCallout(a);
-        if (moving) updateHover(); // peças em movimento sob o cursor parado
+        movedLast = moving; // peças em movimento sob o cursor parado: o hover é refeito no próximo quadro
+        rect = null;        // posição do palco relida (uma vez) no próximo evento de ponteiro
 
         const home = a < 0 && Math.abs(pol.x - POL0) < 0.01 && Math.abs(zoom.x - 1) < 0.01;
-        restoreBtn.disabled = home;
-        zoomIn.disabled = zoom.to <= ZMIN + 0.001;
-        zoomOut.disabled = zoom.to >= ZMAX - 0.001;
+        const zin = zoom.to <= ZMIN + 0.001, zout = zoom.to >= ZMAX - 0.001;
+        if (home !== ui.home) restoreBtn.disabled = ui.home = home;
+        if (zin !== ui.zin) zoomIn.disabled = ui.zin = zin;
+        if (zout !== ui.zout) zoomOut.disabled = ui.zout = zout;
         if (moving || dragging) kick(); else lastT = 0;
       }
       const nearestHome = () => AZ0 + Math.PI * 2 * Math.round((az.x - AZ0) / (Math.PI * 2));
@@ -2469,12 +2602,15 @@
         w = stage.clientWidth; h = stage.clientHeight;
         renderer.setSize(w, h, false);
         camera.aspect = w / h;
+        camera.updateProjectionMatrix(); // a projeção só muda com o tamanho
         lines.setAttribute('viewBox', `0 0 ${w} ${h}`);
+        rect = null;
         kick();
       };
 
       /* ---- Gestos ---- */
-      const local = (e) => { const r = stage.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; };
+      const local = (e) => { if (!rect) rect = stage.getBoundingClientRect(); return { x: e.clientX - rect.left, y: e.clientY - rect.top }; };
+      addEventListener('scroll', () => { rect = null; }, { passive: true });
       const pointers = new Map();
       let history = [], start = null, pinch = null, moved = false;
       const record = () => {
@@ -2504,7 +2640,7 @@
       stage.addEventListener('pointermove', (e) => {
         const p = local(e);
         if (e.pointerType === 'mouse') overUI = !!e.target.closest('button');
-        if (e.pointerType === 'mouse' && !pointers.has(e.pointerId)) { mouse = p; updateHover(); kick(); return; }
+        if (e.pointerType === 'mouse' && !pointers.has(e.pointerId)) { mouse = p; hoverDirty = true; kick(); return; }
         if (!pointers.has(e.pointerId)) return;
         const prev = pointers.get(e.pointerId);
         pointers.set(e.pointerId, p);
@@ -2609,6 +2745,9 @@
         visible = entry.isIntersecting;
         if (visible) kick(); else { cancelAnimationFrame(raf); raf = 0; lastT = 0; }
       }).observe(stage);
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) { cancelAnimationFrame(raf); raf = 0; lastT = 0; } else kick();
+      });
 
       if (!reduce) {
         new IntersectionObserver(([entry], obs) => {
@@ -2618,11 +2757,12 @@
           kick();
         }, { threshold: 0.45 }).observe(stage);
       }
-      resize();
-      loop(performance.now());
-      stage.classList.add('is-ready');
+      // shaders compilados numa etapa própria, antes do primeiro quadro
+      renderer.compile(scene, camera);
+      await pause();
+      resize(); // agenda o primeiro quadro; "is-ready" entra quando ele estiver desenhado
       // estado de teste (somente leitura) para verificação automatizada
-      stage.p3dDebug = () => ({ hover: state.hover, pinned: state.pinned, offsets: off.map((s) => +s.x.toFixed(5)), dragging, press: press.map((s) => +s.x.toFixed(5)), intro: intro.map((s) => +s.x.toFixed(3)), glow: glow.map((s) => +s.x.toFixed(3)), pending: pending.map((p) => p.to), pressPart, prox: +prox.x.toFixed(3), camE: +camE.x.toFixed(3), autoV: +autoV.x.toFixed(3), az: +az.x.toFixed(3) });
+      stage.p3dDebug = () => ({ hover: state.hover, pinned: state.pinned, offsets: off.map((s) => +s.x.toFixed(5)), dragging, press: press.map((s) => +s.x.toFixed(5)), intro: intro.map((s) => +s.x.toFixed(3)), glow: glow.map((s) => +s.x.toFixed(3)), pending: pending.map((p) => p.to), pressPart, prox: +prox.x.toFixed(3), camE: +camE.x.toFixed(3), autoV: +autoV.x.toFixed(3), az: +az.x.toFixed(3), dpr });
       stage.p3dPick = (x, y) => pickCurrent(x, y);
       return { kick };
     }
