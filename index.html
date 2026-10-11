@@ -511,9 +511,8 @@
       position: absolute; inset: 0; width: 100%; height: 100%; display: block;
       opacity: 0; transition: opacity 500ms ease-out;
     }
-    .p3d__poster {
-      position: absolute; left: 50%; top: 50%; width: 62%; max-width: 380px;
-      transform: translate(-50%, -50%); pointer-events: none;
+    .p3d__poster { /* mesmo enquadramento do primeiro quadro do 3D */
+      position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none;
       transition: opacity 400ms ease-out;
     }
     .p3d__stage.is-ready canvas { opacity: 1; }
@@ -613,7 +612,7 @@
 
     @media (max-width: 899px) {
       .p3d { grid-template-columns: minmax(0, 1fr); grid-template-areas: "head" "stage" "ctrl" "cta"; gap: 20px; }
-      .p3d__stage { aspect-ratio: 1 / 1.32; max-height: 620px; } /* modelo alto: palco alto aproveita a área */
+      .p3d__stage { aspect-ratio: 1 / 1.08; max-height: none; } /* conjunto largo (três dentes): palco quase quadrado, mesma proporção do pôster */
       .p3d__restore { right: auto; left: 12px; } /* longe do botão flutuante do WhatsApp */
       .p3d__ctrl { padding: 16px; }
       .p3d__info { min-height: 9rem; }
@@ -1276,9 +1275,9 @@
           <p class="lead" data-reveal style="--d:1">Conheça as três partes de um implante dentário e como elas se encaixam.</p>
         </div>
 
-        <div class="p3d__stage" id="p3dStage" data-model="assets/implante-dentario.01f48816f5.glb" data-viewer="assets/three-r128-viewer.bf018af3f2.js" tabindex="0"
-             role="group" aria-roledescription="modelo 3D" aria-label="Modelo 3D ilustrativo de um implante dentário: coroa em cima, pilar no meio e implante embaixo" aria-describedby="p3dKeys" data-reveal>
-          <img class="p3d__poster" src="3d/modelo-montado.webp" alt="" width="900" height="900" aria-hidden="true" loading="lazy" decoding="async" />
+        <div class="p3d__stage" id="p3dStage" data-model="assets/implante-dentario.01f48816f5.glb" data-viewer="assets/three-r128-viewer.89bafc78ee.js" tabindex="0"
+             role="group" aria-roledescription="modelo 3D" aria-label="Modelo 3D ilustrativo de um implante dentário entre dois dentes naturais, com gengiva e osso em corte: coroa em cima, pilar no meio e implante no osso" aria-describedby="p3dKeys" data-reveal>
+          <img class="p3d__poster" src="3d/poster-arcada.webp" alt="" width="760" height="759" aria-hidden="true" loading="lazy" decoding="async" />
           <canvas id="p3dCanvas" aria-hidden="true"></canvas>
           <svg class="p3d__lines" id="p3dLines" aria-hidden="true"><line /><circle r="2.5" /></svg>
           <span class="p3d__callout" id="p3dCallout" aria-hidden="true"><i class="ph-fill ph-push-pin" aria-hidden="true"><svg><use href="#if-push-pin"/></svg></i><span></span></span>
@@ -1288,7 +1287,7 @@
             <button class="p3d__tool" type="button" data-tool="out" aria-label="Afastar o modelo"><i class="ph-light ph-minus" aria-hidden="true"><svg><use href="#i-minus"/></svg></i></button>
           </div>
           <button class="p3d__restore" type="button" id="p3dRestore" disabled><i class="ph-light ph-arrow-counter-clockwise" aria-hidden="true"><svg><use href="#i-arrow-counter-clockwise"/></svg></i>Restaurar vista</button>
-          <img class="p3d__fallback" src="3d/alternativa-estatica.webp" alt="As três partes do implante: coroa em cima, pilar no meio e implante embaixo" width="900" height="945" loading="lazy" />
+          <img class="p3d__fallback" src="3d/alternativa-arcada.webp" alt="Implante entre dois dentes naturais, com gengiva e osso em corte: coroa em cima, pilar no meio e implante no osso" width="1000" height="999" loading="lazy" />
           <p class="visually-hidden" id="p3dKeys">Use as setas para girar, as teclas mais e menos para aproximar, e zero para restaurar a vista. Os botões Coroa, Pilar e Implante destacam cada peça.</p>
         </div>
 
@@ -2163,7 +2162,7 @@
     // começa quando o palco está a até 1,5 tela E o visitante já rolou a página (ou o palco já está à vista):
     // a inicialização não disputa o processador com a primeira tela de quem ainda nem começou a ler
     const watch = () => {
-      let near = false, scrolled = false, begun = false;
+      let near = false, scrolled = scrollY > 0, begun = false; // já rolou antes do carregamento terminar (ou chegou por âncora)
       const go = () => { if (begun) return; begun = true; io.disconnect(); removeEventListener('scroll', onScroll); start(); };
       const onScroll = () => { scrolled = true; if (near) go(); };
       const io = new IntersectionObserver(([entry]) => {
@@ -2295,8 +2294,11 @@
           m.material = m.material.clone();
           m.userData.part = i;
           const mat = m.material;
-          if (name === 'Coroa') { mat.color.setHex(0xe8dcc6); mat.roughness = 0.4; mat.envMapIntensity = 0.45; }
-          else mat.envMapIntensity = 1.15;
+          if (name === 'Coroa') { mat.color.setHex(0xe6d3b3).convertSRGBToLinear(); mat.roughness = 0.22; mat.envMapIntensity = 0.75; } // esmalte marfim com brilho delicado
+          else { // titânio acetinado, cinza neutro como na referência
+            mat.envMapIntensity = name === 'Pilar' ? 0.95 : 0.8;
+            if (name === 'Implante') mat.color.setRGB(0.5, 0.5, 0.5);
+          }
           mat.userData.base = mat.color.clone();
           mat.userData.env = mat.envMapIntensity;
           return mat;
@@ -2336,6 +2338,133 @@
       const pickables = parts.flatMap((p) => p.meshes);
       await pause();
 
+      /* Contexto da referência aprovada (não selecionável): dentes vizinhos com raízes,
+         gengiva e osso em corte. Fica dentro do mesmo grupo do modelo: acompanha giro e zoom.
+         Vizinhos reaprovam a geometria da coroa já carregada (nenhum download a mais). */
+      const lin = (hex) => new T.Color(hex).convertSRGBToLinear();
+      const ctxMats = [];
+      const ctxMat = (o) => { const m = new T.MeshStandardMaterial(o); m.userData.base = m.color.clone(); m.userData.env = m.envMapIntensity; ctxMats.push(m); return m; };
+      const blockers = []; // ficam na frente das peças: o raio para neles (osso e gengiva atrás não bloqueiam)
+      const V2 = (x, y) => new T.Vector2(x / 1000, y / 1000); // mm -> m
+      // textura muito discreta do osso: manchas suaves de baixo contraste, sem poros
+      const grain = (() => {
+        const c = document.createElement('canvas'); c.width = c.height = 128;
+        const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, 128, 128);
+        for (let i = 0; i < 700; i++) {
+          x.fillStyle = `rgba(120, 90, 50, ${0.018 + Math.random() * 0.03})`;
+          x.beginPath(); x.arc(Math.random() * 128, Math.random() * 128, 0.6 + Math.random() * 2.2, 0, Math.PI * 2); x.fill();
+        }
+        const t = new T.CanvasTexture(c); t.wrapS = t.wrapT = T.RepeatWrapping; t.repeat.set(70, 70); t.encoding = T.sRGBEncoding;
+        return t;
+      })();
+      const DEPTH = 0.006, FACE = 0.00004; // profundidade do bloco; distância das seções à face de corte
+      const slab = (shape, bevel, mat) => {
+        const g = new T.ExtrudeGeometry(shape, { depth: DEPTH, curveSegments: 28, bevelEnabled: true, bevelThickness: bevel, bevelSize: bevel, bevelSegments: 5 });
+        g.translate(0, 0, -(DEPTH + bevel)); // face de corte (frente) em z = 0, bloco para trás
+        const m = new T.Mesh(g, mat); gltf.scene.add(m); return m;
+      };
+      // osso: topo reto (crista) e base arredondada, como na referência
+      const boneShape = new T.Shape();
+      boneShape.moveTo(-16.4 / 1000, 10.6 / 1000);
+      boneShape.lineTo(16.4 / 1000, 10.6 / 1000);
+      boneShape.bezierCurveTo(17.2 / 1000, 8 / 1000, 17.0 / 1000, 3.2 / 1000, 15.6 / 1000, 0.6 / 1000);
+      boneShape.bezierCurveTo(12.4 / 1000, -2.7 / 1000, 3 / 1000, -3.9 / 1000, -5 / 1000, -3.6 / 1000);
+      boneShape.bezierCurveTo(-12.2 / 1000, -3.3 / 1000, -16.5 / 1000, -1.6 / 1000, -16.9 / 1000, 3.2 / 1000);
+      boneShape.lineTo(-16.4 / 1000, 10.6 / 1000);
+      const bone = slab(boneShape, 0.0008, ctxMat({ color: lin(0xe9d2a6), map: grain, roughness: 0.85, metalness: 0, envMapIntensity: 0.55 }));
+      // gengiva: faixa rosa sobre a crista, baixa no colo dos dentes e alta entre eles (papilas)
+      const gumShape = new T.Shape();
+      gumShape.moveTo(-16.6 / 1000, 10.6 / 1000);
+      gumShape.lineTo(16.6 / 1000, 10.6 / 1000);
+      gumShape.lineTo(16.6 / 1000, 13.6 / 1000);
+      gumShape.splineThru([V2(13.6, 14.1), V2(10.55, 13.95), V2(7.6, 14.6), V2(5.3, 15.5), V2(3.0, 14.6), V2(0, 13.95), V2(-3.0, 14.6), V2(-5.3, 15.5), V2(-7.6, 14.6), V2(-10.55, 13.95), V2(-13.6, 14.1), V2(-16.6, 13.6)]);
+      gumShape.lineTo(-16.6 / 1000, 10.6 / 1000);
+      const gum = slab(gumShape, 0.001, ctxMat({ color: lin(0xdb8378), emissive: lin(0x3a120e), roughness: 0.38, metalness: 0, envMapIntensity: 0.7 }));
+      // para a seleção, volumes simplificados e invisíveis (a malha detalhada não entra no raycast)
+      const proxy = (shape) => {
+        const g = new T.ExtrudeGeometry(shape, { depth: DEPTH + 0.0016, curveSegments: 5, bevelEnabled: false });
+        g.translate(0, 0, -(DEPTH + 0.0016));
+        const m = new T.Mesh(g, invisible); gltf.scene.add(m); return m;
+      };
+      bone.raycast = gum.raycast = () => {};
+      blockers.push(proxy(boneShape), proxy(gumShape));
+      // dentes vizinhos (mesma coroa, girada para variar)
+      const enamel = parts[0].mats[0].clone();
+      enamel.userData.base = enamel.color.clone(); enamel.userData.env = enamel.envMapIntensity; ctxMats.push(enamel);
+      const crownHull = new T.LatheGeometry([[0, 0], [3.43, 0], [4.4, 1], [4.89, 2], [5.08, 3], [5.12, 4], [5.01, 5], [4.62, 6], [3.67, 7], [0, 7.07]].map(([r, y]) => new T.Vector2(r / 1000, y / 1000)), 20);
+      [[-10.55, Math.PI, 0.985], [10.55, 0.18, 1]].forEach(([x, ry, s]) => {
+        const m = new T.Mesh(parts[0].meshes[0].geometry, enamel);
+        m.position.set(x / 1000, BASE[0] - 0.0001, 0); m.rotation.y = ry; m.scale.setScalar(s);
+        m.raycast = () => {}; gltf.scene.add(m);
+        // seleção: volume simplificado no perfil medido da coroa, um pouco por dentro dela (nunca bloqueia a mais)
+        const hull = new T.Mesh(crownHull, invisible); hull.position.copy(m.position); hull.rotation.y = ry; hull.scale.set(s * 0.97, s * 0.97, s * 0.88);
+        gltf.scene.add(hull); blockers.push(hull);
+      });
+      // raízes dos vizinhos em corte, na face do osso: contorno do alvéolo + raiz marfim com degradê
+      const rootPath = (sx) => { // duas raízes divergentes; sx = 1 ou -1 (espelha)
+        const s = new T.Shape(), P = (x, y) => [sx * x / 1000, y / 1000];
+        s.moveTo(...P(-3.5, 14.1));
+        s.bezierCurveTo(...P(-3.95, 9.4), ...P(-3.65, 3.6), ...P(-2.35, 1.0));
+        s.bezierCurveTo(...P(-1.95, 0.3), ...P(-1.3, 0.6), ...P(-1.15, 1.4));
+        s.bezierCurveTo(...P(-0.9, 4.6), ...P(-0.5, 7.9), ...P(0.15, 8.6));
+        s.bezierCurveTo(...P(0.75, 7.8), ...P(1.05, 4.8), ...P(1.5, 1.8));
+        s.bezierCurveTo(...P(1.7, 0.9), ...P(2.45, 0.8), ...P(2.65, 1.6));
+        s.bezierCurveTo(...P(3.55, 4.4), ...P(4.0, 9.6), ...P(3.5, 14.1));
+        s.lineTo(...P(-3.5, 14.1));
+        return s;
+      };
+      const offsetShape = (shape, d) => { // contorno deslocado d (m) para fora: o alvéolo
+        const pts = shape.getSpacedPoints(220); pts.pop();
+        let area = 0; pts.forEach((p, i) => { const q = pts[(i + 1) % pts.length]; area += p.x * q.y - q.x * p.y; });
+        const k = area > 0 ? 1 : -1;
+        return new T.Shape(pts.map((p, i) => {
+          const a = pts[(i - 1 + pts.length) % pts.length], b = pts[(i + 1) % pts.length];
+          const tx = b.x - a.x, ty = b.y - a.y, l = Math.hypot(tx, ty) || 1;
+          return new T.Vector2(p.x + (k * ty / l) * d, p.y - (k * tx / l) * d);
+        }));
+      };
+      const faceParts = []; // seções desenhadas na face de corte, unidas no fim numa só malha
+      const flat = (shape, z, x, colorAt) => {
+        const g = new T.ShapeGeometry(shape, 40), pa = g.attributes.position, col = [];
+        for (let i = 0; i < pa.count; i++) { col.push(...colorAt(pa.getY(i)).toArray()); pa.setXYZ(i, pa.getX(i) + x, pa.getY(i), z); }
+        g.setAttribute('color', new T.Float32BufferAttribute(col, 3));
+        faceParts.push(g);
+      };
+      const sockTop = lin(0xd48c7c), sockLow = lin(0xa87d5c);
+      const rootTop = lin(0xf2dcae), rootTip = lin(0xdcb87c), tmp = new T.Color();
+      [[-10.55, -1], [10.55, 1]].forEach(([x, sx]) => {
+        const shape = rootPath(sx);
+        flat(offsetShape(shape, 0.0003), FACE, x / 1000, (y) => tmp.copy(sockLow).lerp(sockTop, Math.min(1, Math.max(0, (y * 1000 - 6) / 7))));
+        flat(shape, FACE * 2, x / 1000, (y) => tmp.copy(rootTip).lerp(rootTop, Math.min(1, Math.max(0, (y * 1000 - 2) / 12))));
+      });
+      // alvéolo do implante: faixa escura em volta do implante, na face do osso
+      const sock = new T.Shape();
+      sock.moveTo(-2.45 / 1000, 10.6 / 1000); sock.lineTo(-2.45 / 1000, 1.2 / 1000);
+      sock.bezierCurveTo(-2.45 / 1000, -0.5 / 1000, 2.45 / 1000, -0.5 / 1000, 2.45 / 1000, 1.2 / 1000);
+      sock.lineTo(2.45 / 1000, 10.6 / 1000); sock.lineTo(-2.45 / 1000, 10.6 / 1000);
+      const sockColor = lin(0x6b5039);
+      flat(sock, FACE, 0, () => sockColor);
+      { // une as seções (posição, normal, cor e índices) numa geometria
+        const total = faceParts.reduce((t, g) => t + g.attributes.position.count, 0);
+        const pos = new Float32Array(total * 3), nor = new Float32Array(total * 3), col = new Float32Array(total * 3), idx = [];
+        let o = 0;
+        faceParts.forEach((g) => {
+          pos.set(g.attributes.position.array, o * 3); nor.set(g.attributes.normal.array, o * 3); col.set(g.attributes.color.array, o * 3);
+          g.index.array.forEach((i) => idx.push(i + o)); o += g.attributes.position.count; g.dispose();
+        });
+        const face = new T.BufferGeometry();
+        face.setAttribute('position', new T.Float32BufferAttribute(pos, 3)); face.setAttribute('normal', new T.Float32BufferAttribute(nor, 3)); face.setAttribute('color', new T.Float32BufferAttribute(col, 3));
+        face.setIndex(idx);
+        const m = new T.Mesh(face, ctxMat({ color: 0xffffff, vertexColors: true, roughness: 0.65, metalness: 0, envMapIntensity: 0.5 }));
+        m.raycast = () => {}; gltf.scene.add(m);
+      }
+      const CTX_TOP = BASE[0] + CROWN_H;           // topo dos vizinhos
+      const SCENE_LO = -0.0048;                     // base do osso (com o arredondamento)
+      const HALF_W = 2.2;
+      const ORBIT_Z = -0.21;                        // centro do conjunto em profundidade (unidades)                          // meia-largura a enquadrar (unidades), cobrindo o giro do bloco
+      const pickList = pickables.concat(blockers), restList = restSet.concat(blockers);
+      await pause();
+
       // sombra de apoio sob o implante
       const sc = document.createElement('canvas');
       sc.width = sc.height = 128;
@@ -2345,9 +2474,9 @@
       sx.fillStyle = g; sx.fillRect(0, 0, 128, 128);
       const shadow = new T.Mesh(new T.PlaneGeometry(1.9, 1.9), new T.MeshBasicMaterial({ map: new T.CanvasTexture(sc), transparent: true, depthWrite: false }));
       shadow.rotation.x = -Math.PI / 2;
-      shadow.position.y = -0.38;
-      shadow.material.opacity = 0.55;
-      shadow.scale.setScalar(1.25);
+      shadow.position.y = -0.56;
+      shadow.material.opacity = 0.5;
+      shadow.scale.set(2.3, 1.6, 1);
       scene.add(shadow);
 
       /* Molas criticamente amortecidas (sem quique), sempre a partir do valor atual.
@@ -2365,7 +2494,7 @@
         if (Math.abs(s.x - s.to) < 1e-6 && Math.abs(s.v) < 1e-5) { s.x = s.to; s.v = 0; return false; }
         return true;
       };
-      const AZ0 = -0.55, POL0 = 1.16, POL_MIN = 0.6, POL_MAX = 1.95, ZMIN = 0.5, ZMAX = 1.25;
+      const AZ0 = -0.42, POL0 = 1.2, POL_MIN = 0.6, POL_MAX = 1.95, ZMIN = 0.5, ZMAX = 1.25;
       const off = parts.map(() => spring(0, 0.45, 1, true));
       const press = parts.map(() => spring(0, 0.15, 1, true));   // #1 afunda ao pressionar
       const pressGlow = parts.map(() => spring(0, 0.12));
@@ -2379,10 +2508,18 @@
       const prox = spring(0, 0.35, 1, true);   // 0 longe -> 1 sobre o modelo
       const camE = spring(0, 0.55, 1, true);   // abertura considerada pelo enquadramento
       const autoV = spring(0, 0.8);            // velocidade da rotação automática (rad/s)
-      const AUTO = 0.2;                        // ~31 s por volta
-      const springs = [az, pol, zoom, callA, draw, prox, camE, autoV, ...off, ...press, ...pressGlow, ...dim, ...glow, ...intro];
+      const AUTO = 0.2;                        // velocidade de referência (rad/s) do movimento automático
+      // balanço automático: em vez da volta completa (de costas, o osso esconde o implante e o pilar),
+      // oscila em torno da vista de frente: ±0,55 rad, ciclo de 16 s, senoide (sem paradas bruscas).
+      // Pico de ~0,22 rad/s, como a rotação anterior; desacelera perto do cursor e pausa ao arrastar (autoV).
+      const SWAY_A = 0.55, SWAY_W = (2 * Math.PI) / 16;
+      let swayPh = Math.asin(Math.max(-1, Math.min(1, AZ0 / SWAY_A))); // começa exatamente na vista inicial
+      const ctxDim = spring(0, 0.25);
+      let ctxShown = -1;
+      const springs = [az, pol, zoom, callA, draw, prox, camE, autoV, ctxDim, ...off, ...press, ...pressGlow, ...dim, ...glow, ...intro];
       const extraNow = [0, 0, 0];
       let resumeAt = 0;
+      let demoAt = 0, demoEnd = 0; // demonstração da separação (telas de toque)
       const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
       const segP = new T.Vector3();
       // distância (px) do cursor ao eixo do modelo projetado na tela -> 0..1
@@ -2419,8 +2556,17 @@
       let cw = 0, ch = 0, shownAlpha = -1, shownPinned = null;
       const measureCallout = () => { cw = callout.offsetWidth; ch = callout.offsetHeight; };
       new ResizeObserver(measureCallout).observe(callout);
+      // a peça ativa está à vista? raio da câmera até o centro dela; osso, gengiva ou vizinho no caminho = escondida
+      const _to = new T.Vector3();
+      const seen = (i) => {
+        const p = parts[i];
+        _to.set(0, p.cy, 0); p.node.localToWorld(_to);
+        raycaster.set(camera.position, _to.sub(camera.position).normalize());
+        const hit = raycaster.intersectObjects(pickList, false)[0];
+        return !hit || hit.object.userData.part === i || hit.object.userData.part >= 0;
+      };
       const placeCallout = (a) => {
-        const show = a >= 0 && w >= 520 && zoom.x > 0.8;
+        const show = a >= 0 && w >= 520 && zoom.x > 0.8 && seen(a); // peça escondida atrás do osso ou de um vizinho: sem legenda
         callA.to = show ? 1 : 0;
         const alpha = callA.x;
         const ra = Math.round(alpha * 1000) / 1000;
@@ -2440,7 +2586,7 @@
         v3.copy(center).addScaledVector(right, p.r).project(camera);
         const ax = (v3.x * 0.5 + 0.5) * w + 6;
         const lx = Math.min(w - cw - 12, Math.max(w * 0.66, ax + 30));
-        const ly = Math.min(h - ch - 60, Math.max(56, cy - ch / 2));
+        const ly = Math.min(h - ch - 60, Math.max(112, cy - ch / 2));
         callout.style.transform = `translate3d(${(lx + (1 - alpha) * 8).toFixed(1)}px, ${ly.toFixed(1)}px, 0)`;
         lineEl.setAttribute('x1', ax.toFixed(1)); lineEl.setAttribute('y1', cy.toFixed(1));
         lineEl.setAttribute('x2', (lx - 6).toFixed(1)); lineEl.setAttribute('y2', (ly + ch / 2).toFixed(1));
@@ -2453,9 +2599,9 @@
       const raycaster = new T.Raycaster();
       const ndc = new T.Vector2();
       const aim = (x, y) => { ndc.set((x / w) * 2 - 1, -(y / h) * 2 + 1); raycaster.setFromCamera(ndc, camera); };
-      const partOf = (list) => { const hit = raycaster.intersectObjects(list, false)[0]; return hit ? hit.object.userData.part : -1; };
-      const pickCurrent = (x, y) => { aim(x, y); return partOf(pickables); };
-      const pickRest = (x, y) => { aim(x, y); return partOf(restSet); };
+      const partOf = (list) => { const hit = raycaster.intersectObjects(list, false)[0]; return hit && hit.object.userData.part !== undefined ? hit.object.userData.part : -1; };
+      const pickCurrent = (x, y) => { aim(x, y); return partOf(pickList); };
+      const pickRest = (x, y) => { aim(x, y); return partOf(restList); };
       const onSticky = (i, x, y) => { aim(x, y); return raycaster.intersectObject(sticky[i], false).length > 0; };
 
       /* Hover estável: entrar responde na hora; sair espera 150 ms.
@@ -2488,6 +2634,8 @@
         if (state.pinned >= 0) return; // seleção fixada não é substituída pelo hover
         const rest = pickRest(mouse.x, mouse.y);
         if (cur >= 0 && cur === rest) { cancelLeave(); setHover(cur); return; }
+        // peça visível sob o cursor cuja posição de repouso só está encoberta por um vizinho: vale o hover
+        if (cur >= 0 && rest < 0 && partOf(restSet) === cur) { cancelLeave(); setHover(cur); return; }
         const hv = state.hover;
         if (hv >= 0 && (cur === hv || rest === hv || onSticky(hv, mouse.x, mouse.y))) { cancelLeave(); return; }
         if (hv < 0 && cur < 0 && rest >= 0) { cancelLeave(); setHover(rest); return; } // entrada pela borda
@@ -2521,6 +2669,10 @@
           }
         } else { frames = 0; slowSum = 0; }
         lastT = t;
+        if (!ready) { // pôster (montado) e 3D se cruzam: com a seção à vista, sem montagem de entrada (sem imagem dupla)
+          const r0 = stage.getBoundingClientRect();
+          if (r0.top < innerHeight && r0.bottom > 0) intro.forEach((s) => { s.x = s.to = 0; s.v = 0; });
+        }
         // hover com a imagem que está na tela (quadro anterior): no máximo uma vez por quadro
         if (hoverDirty || movedLast) { hoverDirty = false; updateHover(); }
         const a = active();
@@ -2535,7 +2687,10 @@
           lastActive = a;
         }
         let moving = false;
-        prox.to = proximity();
+        const demo = demoAt && t >= demoAt && t < demoEnd ? 1 : 0;
+        prox.to = Math.max(proximity(), demo);
+        if (demoAt && t < demoEnd) moving = true; // mantém o laço até a demonstração terminar
+        if (Math.abs(prox.to - prox.x) > 1e-4) moving = true; // garante o quadro seguinte (com movimento reduzido a mola salta)
         const pe = a >= 0 ? 1 : prox.x;     // peça apontada/fixada: conjunto aberto por completo
         camE.to = a >= 0 ? 1 : prox.to;
         // rotação automática: lenta, mais lenta com o cursor perto, parada ao arrastar e logo depois
@@ -2547,6 +2702,7 @@
           press[i].to = i === pressPart ? -0.0004 : 0;
           pressGlow[i].to = i === pressPart ? 0.5 : 0;
           dim[i].to = a >= 0 && i !== a ? 0.28 : 0;
+          ctxDim.to = a >= 0 ? 0.22 : 0;
           glow[i].to = i !== a ? 0 : state.pinned === a ? 0.9 : 0.45;
         });
         if (introAt) { // montagem de entrada: pilar encaixa, a coroa vem logo depois
@@ -2554,7 +2710,11 @@
           if (t >= introAt + 90) intro[0].to = 0; else moving = true;
         }
         springs.forEach((s) => { if ((s === az || s === pol) && dragging) return; if (stepSpring(s, dt)) moving = true; });
-        if (!dragging && autoV.x > 0) { az.x += autoV.x * dt; az.to += autoV.x * dt; }
+        if (!dragging && autoV.x > 0) { // soma só a variação do balanço: convive com arraste, teclado e inércia
+          const ph = swayPh + SWAY_W * (autoV.x / AUTO) * dt;
+          const d = SWAY_A * (Math.sin(ph) - Math.sin(swayPh));
+          swayPh = ph; az.x += d; az.to += d;
+        }
         restSet.forEach((g) => { // referências de seleção seguem a abertura por proximidade
           if (g.userData.base !== undefined) g.position.y = g.userData.base + PROX[g.userData.part] * prox.x;
         });
@@ -2572,16 +2732,22 @@
             });
           }
         });
+        if (ctxDim.x !== ctxShown) {
+          ctxShown = ctxDim.x;
+          ctxMats.forEach((m) => { m.color.copy(m.userData.base).lerp(SHADE, 0.6 * ctxDim.x); m.envMapIntensity = m.userData.env * (1 - 0.5 * ctxDim.x); });
+        }
         // enquadramento centralizado no conjunto: acompanha a abertura geral (não a peça apontada),
         // com folga para o extra da peça, então nada sai da tela nem "foge" do cursor
         const tanH = Math.tan((camera.fov * Math.PI) / 360);
-        const layoutTop = (BASE[0] + (PROX[0] + EXTRA[2][0]) * camE.x + CROWN_H) * 100;
-        const fitH = layoutTop * 1.22;
-        const dist = Math.max(fitH / 2 / tanH, 1.5 / (tanH * camera.aspect)) * zoom.x;
-        const ty = layoutTop / 2;
+        const layoutTop = Math.max(BASE[0] + (PROX[0] + EXTRA[2][0]) * camE.x + CROWN_H, CTX_TOP) * 100;
+        const lo = SCENE_LO * 100;
+        const fitH = (layoutTop - lo) * 1.3;
+        const dist = Math.max(fitH / 2 / tanH, HALF_W / (tanH * camera.aspect)) * zoom.x;
+        const ty = (layoutTop + lo) / 2;
         const pp = rubber(pol.x, POL_MIN, POL_MAX);
-        camera.position.set(dist * Math.sin(pp) * Math.sin(az.x), ty + dist * Math.cos(pp), dist * Math.sin(pp) * Math.cos(az.x));
-        camera.lookAt(0, ty, 0);
+        // órbita em torno do centro do conjunto (o bloco fica atrás da face de corte): giro sem "andar" de lado
+        camera.position.set(dist * Math.sin(pp) * Math.sin(az.x), ty + dist * Math.cos(pp), ORBIT_Z + dist * Math.sin(pp) * Math.cos(az.x));
+        camera.lookAt(0, ty, ORBIT_Z);
         camera.updateMatrixWorld();
         renderer.render(scene, camera);
         if (!ready) { ready = true; stage.classList.add('is-ready'); } // o pôster sai só com o primeiro quadro pronto
@@ -2668,6 +2834,7 @@
       });
 
       stage.addEventListener('pointerdown', (e) => {
+        demoAt = 0; // a pessoa assumiu: a demonstração para (as peças voltam pela mola)
         if (e.target.closest('button') || (e.pointerType === 'mouse' && e.button !== 0)) return;
         const p = local(e);
         pointers.set(e.pointerId, p);
@@ -2675,6 +2842,8 @@
           start = p; moved = false;
           pressPart = pickCurrent(p.x, p.y);
           if (pressPart < 0 && e.pointerType !== 'mouse') pressPart = pickRest(p.x, p.y);
+          // mesma regra do clique: a peça em destaque responde no seu volume mesmo se saiu de baixo do cursor
+          if (pressPart < 0 && e.pointerType === 'mouse' && state.hover >= 0 && onSticky(state.hover, p.x, p.y)) pressPart = state.hover;
         }
         if (pointers.size === 2) { // pinça: zoom + giro
           const [a, b] = [...pointers.values()];
@@ -2724,7 +2893,11 @@
       }, { passive: false });
 
       const zoomStep = (f) => { zoom.to = Math.min(ZMAX, Math.max(ZMIN, zoom.to * f)); kick(); };
-      const restore = () => { state.hover = -1; state.pinned = -1; az.to = az.x; az.v = 0; pol.to = POL0; zoom.to = 1; resumeAt = 0; render(); };
+      const restore = () => {
+        const c = az.x - SWAY_A * Math.sin(swayPh); // centro atual do balanço
+        state.hover = -1; state.pinned = -1; az.to = az.x + (2 * Math.PI * Math.round(c / (2 * Math.PI)) - c); az.v = 0;
+        pol.to = POL0; zoom.to = 1; resumeAt = 0; render();
+      };
       zoomIn.addEventListener('click', () => zoomStep(0.8));
       zoomOut.addEventListener('click', () => zoomStep(1 / 0.8));
       restoreBtn.addEventListener('click', restore);
@@ -2757,12 +2930,23 @@
           kick();
         }, { threshold: 0.45 }).observe(stage);
       }
+      // sem cursor (toque) não existe aproximação: uma vez por visita, depois da montagem de entrada,
+      // as peças se abrem por 1,4 s e voltam. Para no primeiro toque; não acontece com movimento reduzido.
+      if (!reduce && coarse.matches) {
+        new IntersectionObserver(([entry], obs) => {
+          if (!entry.isIntersecting) return;
+          obs.disconnect();
+          demoAt = Math.max(performance.now() + 700, introAt ? introAt + 1300 : 0);
+          demoEnd = demoAt + 1400;
+          kick();
+        }, { threshold: 0.6 }).observe(stage);
+      }
       // shaders compilados numa etapa própria, antes do primeiro quadro
       renderer.compile(scene, camera);
       await pause();
       resize(); // agenda o primeiro quadro; "is-ready" entra quando ele estiver desenhado
       // estado de teste (somente leitura) para verificação automatizada
-      stage.p3dDebug = () => ({ hover: state.hover, pinned: state.pinned, offsets: off.map((s) => +s.x.toFixed(5)), dragging, press: press.map((s) => +s.x.toFixed(5)), intro: intro.map((s) => +s.x.toFixed(3)), glow: glow.map((s) => +s.x.toFixed(3)), pending: pending.map((p) => p.to), pressPart, prox: +prox.x.toFixed(3), camE: +camE.x.toFixed(3), autoV: +autoV.x.toFixed(3), az: +az.x.toFixed(3), dpr });
+      stage.p3dDebug = () => ({ hover: state.hover, pinned: state.pinned, offsets: off.map((s) => +s.x.toFixed(5)), dragging, press: press.map((s) => +s.x.toFixed(5)), intro: intro.map((s) => +s.x.toFixed(3)), glow: glow.map((s) => +s.x.toFixed(3)), pending: pending.map((p) => p.to), pressPart, prox: +prox.x.toFixed(3), camE: +camE.x.toFixed(3), autoV: +autoV.x.toFixed(3), az: +az.x.toFixed(3), dpr, demo: demoAt ? Math.round(demoAt) : 0 });
       stage.p3dPick = (x, y) => pickCurrent(x, y);
       return { kick };
     }
