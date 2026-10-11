@@ -1,0 +1,45 @@
+MODELO DE COROA, PILAR E IMPLANTE — USO E PROVENIÊNCIA
+Criado em 11 de outubro de 2026 para o solicitante desta conversa.
+
+ORIGEM
+Geometria paramétrica original gerada nesta sessão, sem importar malhas,
+texturas, HDRIs, fotografias, escaneamentos ou desenhos industriais de terceiros.
+O objeto representa genericamente um conjunto de implante. Não é um produto
+de fabricante identificado nem uma reprodução de um dispositivo específico.
+
+DIREITOS E USO COMERCIAL
+Este material é uma saída gerada para o usuário. Conforme os Termos de Uso
+da OpenAI aplicáveis, entre o usuário e a OpenAI e na medida permitida pela
+legislação, o usuário é titular da saída e recebe os direitos da OpenAI nela,
+se houver. O arquivo é entregue para uso em sites, apresentações, demonstrações
+e trabalhos comerciais, inclusive edição e entrega a clientes, sujeito aos
+termos aplicáveis e aos direitos de terceiros.
+
+Não foi incorporado nenhum asset de banco de modelos que exija compra,
+royalties ou atribuição. Não foi acrescentada exigência de crédito ao modelo.
+Não se presume exclusividade, registrabilidade autoral ou ausência de qualquer
+direito de terceiro em todas as jurisdições. O usuário decide como licenciar
+o material a seus próprios clientes; este texto não concede direitos em nome
+de fabricantes, bancos de modelos ou dentistas.
+
+Este documento registra a proveniência e a base de uso da saída gerada.
+Não é certificado de compra de uma licença de marketplace, nem uma licença
+CC0/Creative Commons aplicada aos direitos do usuário.
+
+Fonte dos termos consultada na data da criação:
+https://openai.com/policies/row-terms-of-use/
+Seção: Content — Ownership of content / Similarity of content.
+
+LIMITAÇÃO TÉCNICA
+Ilustração estilizada destinada à comunicação visual. A coroa não deriva de
+um escaneamento anatômico e não foi validada clinicamente. Dimensões e encaixes
+são ilustrativos. Não utilizar para fabricação, prótese, diagnóstico,
+planejamento cirúrgico ou seleção de componentes reais. A demonstração de
+separação exibe as peças, não um procedimento de tratamento.
+
+FERRAMENTAS
+Foram utilizados NumPy, SciPy e trimesh para construir a malha; pyrender para
+as prévias; Pillow para a composição; glTF Validator para validação do GLB.
+Essas ferramentas não estão distribuídas dentro dos GLBs. O script-fonte
+original acompanha o pacote; instalar as dependências exige observar seus
+próprios termos. Nenhum asset 3D de terceiros está incluído.
